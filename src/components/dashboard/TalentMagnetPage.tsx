@@ -277,7 +277,7 @@ const TalentMagnetPage = () => {
               <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Talent Magnet Analysis</span>
               <h1 className="text-4xl font-bold text-foreground mt-3 mb-4">Who Attracts Future Leaders?</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Some leaders naturally attract, develop, and retain future VPs at a higher rate than their peers. When we see a cluster of high-potential directors under one manager, it's worth asking: is this person doing something deliberate that we can learn from?
+                Some leaders consistently attract and develop future VPs. When high-potential directors cluster under one manager, it's worth asking what they're doing that others can learn from.
               </p>
             </div>
           </div>
