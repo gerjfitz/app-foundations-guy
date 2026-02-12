@@ -154,15 +154,15 @@ const SignalExplorer = () => {
                           <div
                             key={idx}
                             ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
-                            className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white border border-border/50 hover:shadow-md transition-all cursor-pointer"
+                            className="flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 hover:shadow-md transition-all cursor-pointer"
                           >
                             {/* Strength Ring */}
                             <div className="flex-shrink-0">
                               <StrengthRing
                                 value={subSignal.predictiveStrength}
                                 color={category.color}
-                                size={38}
-                                strokeWidth={3}
+                                size={46}
+                                strokeWidth={3.5}
                               />
                             </div>
 
@@ -174,7 +174,7 @@ const SignalExplorer = () => {
 
                             {/* Predictive level badge — right aligned */}
                             <span
-                              className="text-[10px] font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                              className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
                               style={{ backgroundColor: level.bgColor, color: level.color }}
                             >
                               {level.label}
