@@ -31,7 +31,7 @@ const LeadershipDNAPage = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.15 }}
-              className="relative rounded-2xl border border-border/30 p-5 mb-8 overflow-hidden flex items-center justify-between"
+              className="relative rounded-2xl border border-border/30 p-7 mb-8 overflow-hidden flex items-center justify-between"
               style={{
                 background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04) 50%, rgba(168, 85, 247, 0.06))",
               }}
@@ -53,8 +53,8 @@ const LeadershipDNAPage = () => {
               <div className="relative z-10 flex items-center gap-3 flex-shrink-0 ml-6">
                 <div className="flex flex-col items-center">
                   <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center border-[3px]"
-                    style={{ borderColor: "#22c55e", background: "linear-gradient(135deg, rgba(34,197,94,0.12), rgba(16,185,129,0.08))" }}
+                    className="w-16 h-16 rounded-full flex items-center justify-center border-[3px] bg-white"
+                    style={{ borderColor: "#22c55e" }}
                   >
                     <span className="text-xl font-bold" style={{ color: "#16a34a" }}>30</span>
                   </div>
