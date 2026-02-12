@@ -168,17 +168,17 @@ const SignalExplorer = () => {
 
                             {/* Signal info */}
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-0.5">
-                                <h4 className="font-semibold text-sm text-foreground truncate">{subSignal.name}</h4>
-                                <span
-                                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
-                                  style={{ backgroundColor: level.bgColor, color: level.color }}
-                                >
-                                  {level.label}
-                                </span>
-                              </div>
+                              <h4 className="font-semibold text-sm text-foreground truncate">{subSignal.name}</h4>
                               <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
                             </div>
+
+                            {/* Predictive level badge — right aligned */}
+                            <span
+                              className="text-[10px] font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: level.bgColor, color: level.color }}
+                            >
+                              {level.label}
+                            </span>
                           </div>
                         );
                       })}
