@@ -154,15 +154,15 @@ const SignalExplorer = () => {
                           <div
                             key={idx}
                             ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
-                            className="flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 hover:shadow-md transition-all cursor-pointer"
+                            className="flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm transition-none"
                           >
                             {/* Strength Ring */}
                             <div className="flex-shrink-0">
                               <StrengthRing
                                 value={subSignal.predictiveStrength}
                                 color={category.color}
-                                size={46}
-                                strokeWidth={3.5}
+                                size={52}
+                                strokeWidth={4}
                               />
                             </div>
 
