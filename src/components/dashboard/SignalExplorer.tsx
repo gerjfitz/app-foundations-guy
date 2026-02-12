@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signalCategories } from "./GenomeVisual";
+import StrengthRing from "./StrengthRing";
+
+const getPredictiveLevel = (pct: number) => {
+  if (pct >= 70) return { label: "High", color: "#22c55e", bgColor: "rgba(34,197,94,0.08)" };
+  if (pct >= 40) return { label: "Medium", color: "#f59e0b", bgColor: "rgba(245,158,11,0.08)" };
+  return { label: "Low", color: "#64748b", bgColor: "rgba(100,116,139,0.08)" };
+};
 
 const SignalExplorer = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(["executive"]));
@@ -23,7 +30,6 @@ const SignalExplorer = () => {
     });
   };
 
-  // Calculate curved connection lines from category node to each sub-signal
   const updateLines = useCallback(() => {
     if (!containerRef.current || expandedCategories.size === 0) {
       setLines([]);
@@ -98,17 +104,16 @@ const SignalExplorer = () => {
         ))}
       </svg>
 
-      {/* Vertical list — each category is a row; when expanded, sub-signals appear beside it */}
-      <div className="space-y-3">
+      {/* Vertical list */}
+      <div className="space-y-6">
         {signalCategories.map((category) => {
           const isExpanded = expandedCategories.has(category.id);
           
           return (
             <div key={category.id}>
-              {/* Row: category node on left, sub-signals on right when expanded */}
               <div className={cn("flex gap-12", isExpanded ? "items-center" : "items-start")}>
-                {/* Left: category trigger — fixed width */}
-                <div className="w-72 flex-shrink-0">
+                {/* Left: category trigger */}
+                <div className="w-64 flex-shrink-0">
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
@@ -140,7 +145,7 @@ const SignalExplorer = () => {
                   </div>
                 </div>
 
-                {/* Right: sub-signals (only when expanded) */}
+                {/* Right: sub-signals with strength ring */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
@@ -148,29 +153,42 @@ const SignalExplorer = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 16 }}
                       transition={{ duration: 0.25 }}
-                      className="flex-1 min-w-0 space-y-2 py-1"
+                      className="flex-1 min-w-0 space-y-2.5 py-1"
                     >
-                      {category.subSignals.map((subSignal, idx) => (
-                        <div
-                          key={idx}
-                          ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
-                          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-border/50 hover:shadow-md transition-all cursor-pointer"
-                        >
-                          <div 
-                            className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: `${category.color}15` }}
+                      {category.subSignals.map((subSignal, idx) => {
+                        const level = getPredictiveLevel(subSignal.predictiveStrength);
+                        return (
+                          <div
+                            key={idx}
+                            ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
+                            className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white border border-border/50 hover:shadow-md transition-all cursor-pointer"
                           >
-                            <div 
-                              className="h-2.5 w-2.5 rounded-full"
-                              style={{ backgroundColor: category.color }}
-                            />
+                            {/* Strength Ring */}
+                            <div className="flex-shrink-0">
+                              <StrengthRing
+                                value={subSignal.predictiveStrength}
+                                color={category.color}
+                                size={38}
+                                strokeWidth={3}
+                              />
+                            </div>
+
+                            {/* Signal info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-0.5">
+                                <h4 className="font-semibold text-sm text-foreground truncate">{subSignal.name}</h4>
+                                <span
+                                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+                                  style={{ backgroundColor: level.bgColor, color: level.color }}
+                                >
+                                  {level.label}
+                                </span>
+                              </div>
+                              <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-sm" style={{ color: category.color }}>{subSignal.name}</h4>
-                            <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </motion.div>
                   )}
                 </AnimatePresence>

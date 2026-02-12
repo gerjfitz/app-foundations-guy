@@ -39,6 +39,12 @@ const mockPeople: Record<string, { name: string; initials: string; photo: string
   ],
 };
 
+export interface SubSignal {
+  name: string;
+  description: string;
+  predictiveStrength: number;
+}
+
 export const signalCategories = [
   {
     id: "executive",
@@ -49,13 +55,13 @@ export const signalCategories = [
     ringColor: "rgba(251, 191, 36, 0.25)",
     strength: 85,
     subSignals: [
-      { name: "CEO/C-Suite Direct Access", description: "Regular interaction and recognition from C-level executives" },
-      { name: "SVP Recognition + Global Scope", description: "Recognition from senior VPs with global organizational impact" },
-      { name: "Multiple VP Sources (Cross-Functional)", description: "Recognition from VPs across different functional areas" },
-      { name: "CFO + Vision Alignment", description: "Financial leadership recognition and strategic alignment" },
-      { name: "Regional President Recognition", description: "Visibility with regional leadership across geographies" },
-      { name: "Senior Leadership Visit Hosting", description: "Trusted to host and represent during executive visits" },
-    ],
+      { name: "CEO/C-Suite Direct Access", description: "Regular interaction and recognition from C-level executives", predictiveStrength: 95 },
+      { name: "SVP Recognition + Global Scope", description: "Recognition from senior VPs with global organizational impact", predictiveStrength: 97 },
+      { name: "Multiple VP Sources (Cross-Functional)", description: "Recognition from VPs across different functional areas", predictiveStrength: 85 },
+      { name: "CFO + Vision Alignment", description: "Financial leadership recognition and strategic alignment", predictiveStrength: 69 },
+      { name: "Regional President Recognition", description: "Visibility with regional leadership across geographies", predictiveStrength: 60 },
+      { name: "Senior Leadership Visit Hosting", description: "Trusted to host and represent during executive visits", predictiveStrength: 68 },
+    ] as SubSignal[],
   },
   {
     id: "strategic",
@@ -66,12 +72,12 @@ export const signalCategories = [
     ringColor: "rgba(168, 85, 247, 0.25)",
     strength: 92,
     subSignals: [
-      { name: "Enterprise Transformation Programme Role", description: "Leading organization-wide change initiatives" },
-      { name: "Technical → Advisor Role Transition", description: "Moving from technical execution to strategic advisory" },
-      { name: "Cross-Regional Deployment", description: "Strategic impact across multiple geographies" },
-      { name: "Investor-Facing Work", description: "Exposure to investor relations and communications" },
-      { name: "Market/Industry Creation", description: "Contributing to new market or industry development" },
-    ],
+      { name: "Enterprise Transformation Programme Role", description: "Leading organization-wide change initiatives", predictiveStrength: 88 },
+      { name: "Technical → Advisor Role Transition", description: "Moving from technical execution to strategic advisory", predictiveStrength: 82 },
+      { name: "Cross-Regional Deployment", description: "Strategic impact across multiple geographies", predictiveStrength: 64 },
+      { name: "Investor-Facing Work", description: "Exposure to investor relations and communications", predictiveStrength: 35 },
+      { name: "Market/Industry Creation", description: "Contributing to new market or industry development", predictiveStrength: 28 },
+    ] as SubSignal[],
   },
   {
     id: "voice",
@@ -82,12 +88,12 @@ export const signalCategories = [
     ringColor: "rgba(59, 130, 246, 0.25)",
     strength: 58,
     subSignals: [
-      { name: "Courageous Voice in Senior Forums", description: "Speaking truth to power and challenging status quo" },
-      { name: "Honest/Balanced View Recognition", description: "Providing balanced, objective perspectives" },
-      { name: "Partnership Language (Not Service)", description: "Communicating as strategic partner, not service provider" },
-      { name: "Organization Design Language", description: "Contributing to organizational structure discussions" },
-      { name: "Speaking Up for Others", description: "Advocating for team members and peers" },
-    ],
+      { name: "Courageous Voice in Senior Forums", description: "Speaking truth to power and challenging status quo", predictiveStrength: 91 },
+      { name: "Honest/Balanced View Recognition", description: "Providing balanced, objective perspectives", predictiveStrength: 76 },
+      { name: "Partnership Language (Not Service)", description: "Communicating as strategic partner, not service provider", predictiveStrength: 52 },
+      { name: "Organization Design Language", description: "Contributing to organizational structure discussions", predictiveStrength: 34 },
+      { name: "Speaking Up for Others", description: "Advocating for team members and peers", predictiveStrength: 58 },
+    ] as SubSignal[],
   },
   {
     id: "transformation",
@@ -98,12 +104,12 @@ export const signalCategories = [
     ringColor: "rgba(249, 115, 22, 0.25)",
     strength: 74,
     subSignals: [
-      { name: "Organizational Transformation Leadership", description: "Leading fundamental change in how the organization operates" },
-      { name: "Enterprise Geographic Scope", description: "Impact spanning multiple geographic regions" },
-      { name: "Sustained Excellence (3+ Years)", description: "Consistent high performance over extended period" },
-      { name: "Role Model Recognition", description: "Cited as example for others to follow" },
-      { name: "Cross-Functional Implementation", description: "Successfully implementing changes across functions" },
-    ],
+      { name: "Organizational Transformation Leadership", description: "Leading fundamental change in how the organization operates", predictiveStrength: 93 },
+      { name: "Enterprise Geographic Scope", description: "Impact spanning multiple geographic regions", predictiveStrength: 62 },
+      { name: "Sustained Excellence (3+ Years)", description: "Consistent high performance over extended period", predictiveStrength: 89 },
+      { name: "Role Model Recognition", description: "Cited as example for others to follow", predictiveStrength: 56 },
+      { name: "Cross-Functional Implementation", description: "Successfully implementing changes across functions", predictiveStrength: 67 },
+    ] as SubSignal[],
   },
   {
     id: "people",
@@ -114,12 +120,12 @@ export const signalCategories = [
     ringColor: "rgba(20, 184, 166, 0.25)",
     strength: 68,
     subSignals: [
-      { name: "Technical + Relational Excellence", description: "Balancing technical skills with relationship building" },
-      { name: "People Development & Mentorship", description: "Actively growing and mentoring team members" },
-      { name: "Team Wellbeing Advocacy", description: "Prioritizing team health and work-life balance" },
-      { name: "Senior Leader Transition Support", description: "Helping leaders transition to new roles" },
-      { name: "Team Morale During Crisis", description: "Maintaining team morale through difficult periods" },
-    ],
+      { name: "Technical + Relational Excellence", description: "Balancing technical skills with relationship building", predictiveStrength: 72 },
+      { name: "People Development & Mentorship", description: "Actively growing and mentoring team members", predictiveStrength: 90 },
+      { name: "Team Wellbeing Advocacy", description: "Prioritizing team health and work-life balance", predictiveStrength: 48 },
+      { name: "Senior Leader Transition Support", description: "Helping leaders transition to new roles", predictiveStrength: 55 },
+      { name: "Team Morale During Crisis", description: "Maintaining team morale through difficult periods", predictiveStrength: 44 },
+    ] as SubSignal[],
   },
   {
     id: "anti-patterns",
@@ -130,14 +136,14 @@ export const signalCategories = [
     ringColor: "rgba(239, 68, 68, 0.25)",
     strength: 42,
     subSignals: [
-      { name: "High-Volume Service Recognition", description: "Recognition focused on service delivery rather than leadership" },
-      { name: "Single VP Source (Same Person)", description: "Recognition coming from only one senior leader" },
-      { name: "Technical Tool Excellence Only", description: "Excelling at tools but not strategic thinking" },
-      { name: "Crisis Execution (Not Leadership)", description: "Firefighting without leading through change" },
-      { name: "Digital Product Ownership Only", description: "Product focus without broader organizational impact" },
-      { name: "Peer-Level Recognition Dominant", description: "Primarily recognized by peers, not senior leaders" },
-      { name: "Service Provider Language", description: "Using service-oriented rather than partnership language" },
-    ],
+      { name: "High-Volume Service Recognition", description: "Recognition focused on service delivery rather than leadership", predictiveStrength: 15 },
+      { name: "Single VP Source (Same Person)", description: "Recognition coming from only one senior leader", predictiveStrength: 22 },
+      { name: "Technical Tool Excellence Only", description: "Excelling at tools but not strategic thinking", predictiveStrength: 12 },
+      { name: "Crisis Execution (Not Leadership)", description: "Firefighting without leading through change", predictiveStrength: 18 },
+      { name: "Digital Product Ownership Only", description: "Product focus without broader organizational impact", predictiveStrength: 20 },
+      { name: "Peer-Level Recognition Dominant", description: "Primarily recognized by peers, not senior leaders", predictiveStrength: 25 },
+      { name: "Service Provider Language", description: "Using service-oriented rather than partnership language", predictiveStrength: 14 },
+    ] as SubSignal[],
   },
 ];
 
@@ -172,15 +178,12 @@ const SignalCard = ({
         "flex flex-col p-7 pb-10 h-[370px]"
       )}
     >
-      {/* Subtle radial glow on hover */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
           background: `radial-gradient(ellipse at 50% 20%, ${signal.colorLight}, transparent 70%)`,
         }}
       />
-
-      {/* Layered gradient circle — 20% larger */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -192,76 +195,30 @@ const SignalCard = ({
         <div className="absolute inset-[24px] rounded-full" style={{ backgroundColor: signal.color, opacity: 0.18 }} />
         <div className="absolute inset-[36px] rounded-full" style={{ backgroundColor: signal.color, opacity: 0.25 }} />
         <div className="relative w-[62px] h-[62px] rounded-full bg-card flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold leading-none" style={{ color: signal.color }}>
-            {signalCount}
-          </span>
-          <span className="text-[8px] font-semibold uppercase tracking-wider text-muted-foreground/70 mt-1">
-            Signals
-          </span>
+          <span className="text-2xl font-bold leading-none" style={{ color: signal.color }}>{signalCount}</span>
+          <span className="text-[8px] font-semibold uppercase tracking-wider text-muted-foreground/70 mt-1">Signals</span>
         </div>
       </motion.div>
-
-      {/* Title */}
-      <h3 className="relative z-10 font-semibold text-foreground tracking-tight leading-snug text-lg mb-1">
-        {signal.name}
-      </h3>
-
-      {/* Description — fixed 2 lines */}
-      <p className="relative z-10 text-muted-foreground/70 leading-relaxed text-xs line-clamp-2 min-h-[2.5rem] mb-auto">
-        {signal.description}
-      </p>
-
-      {/* Separator */}
+      <h3 className="relative z-10 font-semibold text-foreground tracking-tight leading-snug text-lg mb-1">{signal.name}</h3>
+      <p className="relative z-10 text-muted-foreground/70 leading-relaxed text-xs line-clamp-2 min-h-[2.5rem] mb-auto">{signal.description}</p>
       <div className="relative z-10 border-t border-border/30 mx-1 mb-4 mt-4" />
-
-      {/* Avatar row: overlapping circles + text */}
       <div className="relative z-10 flex items-center gap-2.5 mb-4">
         <div className="flex -space-x-2 flex-shrink-0">
           {displayPeople.map((person) => (
-            <Avatar
-              key={person.initials}
-              className="w-7 h-7 rounded-full border-2 border-card"
-            >
+            <Avatar key={person.initials} className="w-7 h-7 rounded-full border-2 border-card">
               <AvatarImage src={person.photo} alt={person.name} className="rounded-full" />
-              <AvatarFallback
-                className="text-[9px] font-semibold rounded-full"
-                style={{
-                  backgroundColor: signal.colorLight,
-                  color: signal.color,
-                }}
-              >
-                {person.initials}
-              </AvatarFallback>
+              <AvatarFallback className="text-[9px] font-semibold rounded-full" style={{ backgroundColor: signal.colorLight, color: signal.color }}>{person.initials}</AvatarFallback>
             </Avatar>
           ))}
           {extraCount > 0 && (
-            <div
-              className="w-7 h-7 rounded-full border-2 border-card flex items-center justify-center text-[9px] font-semibold"
-              style={{
-                backgroundColor: signal.colorLight,
-                color: signal.color,
-              }}
-            >
-              +{extraCount}
-            </div>
+            <div className="w-7 h-7 rounded-full border-2 border-card flex items-center justify-center text-[9px] font-semibold" style={{ backgroundColor: signal.colorLight, color: signal.color }}>+{extraCount}</div>
           )}
         </div>
         <p className="text-[11px] leading-snug text-muted-foreground/70">
-          <span className="font-medium text-foreground/80">
-            {displayPeople.map(p => p.name.split(" ")[0]).join(", ")}
-          </span>
-          {" "}showing this signal
+          <span className="font-medium text-foreground/80">{displayPeople.map(p => p.name.split(" ")[0]).join(", ")}</span>{" "}showing this signal
         </p>
       </div>
-
-      {/* Bottom strength accent line */}
-      <div
-        className="absolute bottom-0 left-0 h-1 rounded-b-2xl transition-all duration-500"
-        style={{
-          width: `${signal.strength}%`,
-          backgroundColor: signal.color,
-        }}
-      />
+      <div className="absolute bottom-0 left-0 h-1 rounded-b-2xl transition-all duration-500" style={{ width: `${signal.strength}%`, backgroundColor: signal.color }} />
     </motion.button>
   );
 };
@@ -271,12 +228,7 @@ const GenomeVisual = ({ onSignalClick }: GenomeVisualProps) => {
     <div className="w-full">
       <div className="grid grid-cols-3 gap-4">
         {signalCategories.map((signal, i) => (
-          <SignalCard
-            key={signal.id}
-            signal={signal}
-            index={i}
-            onSignalClick={onSignalClick}
-          />
+          <SignalCard key={signal.id} signal={signal} index={i} onSignalClick={onSignalClick} />
         ))}
       </div>
     </div>
