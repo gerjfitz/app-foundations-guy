@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
 import SignalExplorer from "./SignalExplorer";
 import SignalAISidebar from "./SignalAISidebar";
 import GenomeStrand from "./GenomeStrand";
@@ -27,36 +26,12 @@ const LeadershipDNAPage = () => {
         {/* Content */}
         <div className="flex justify-center">
           <div className="w-full max-w-[1020px] py-8 px-8">
-            {/* AI Insight banner */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-              className="relative rounded-2xl border border-border/30 p-5 mb-8 overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04) 50%, rgba(168, 85, 247, 0.06))",
-              }}
-            >
-              <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%)" }} />
-              <div className="flex items-start gap-4 relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-bold text-foreground">AI Insight</h3>
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-primary/70 bg-primary/10 rounded-full px-2 py-0.5">iQ Analysis</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    These leadership signals are derived from the recognition patterns happening across your organisation. Workhuman iQ analyses peer-to-peer recognition data to surface emerging leadership behaviors that traditional assessments miss.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <p className="text-[11px] uppercase tracking-widest text-muted-foreground mb-6">
-              Predictive strength shows how often each signal appears in leaders who advanced to VP+
-            </p>
+            <div className="mb-8">
+              <h2 className="text-base font-semibold text-foreground mb-1">Signal Predictive Strength</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Predictive strength shows how often each signal appears in leaders who advanced to VP+ (Accelerate group)
+              </p>
+            </div>
 
             <SignalExplorer />
           </div>
