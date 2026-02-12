@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Activity } from "lucide-react";
 import SignalExplorer from "./SignalExplorer";
 import SignalAISidebar from "./SignalAISidebar";
 import GenomeStrand from "./GenomeStrand";
@@ -37,7 +38,10 @@ const LeadershipDNAPage = () => {
             >
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%)" }} />
               <div className="relative z-10">
-                <h2 className="text-base font-semibold text-foreground mb-1">Signal Predictive Strength</h2>
+                <h2 className="text-base font-semibold text-foreground mb-1 flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-primary" />
+                  Signal Predictive Strength
+                </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
                   Predictive strength shows how often each signal appears in leaders who advanced to VP+ (Accelerate group)
                 </p>
