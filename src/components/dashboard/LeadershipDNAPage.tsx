@@ -6,30 +6,27 @@ import GenomeStrand from "./GenomeStrand";
 
 const LeadershipDNAPage = () => {
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-page-background">
-      {/* Hero Section */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="pt-10 pb-6 px-8 bg-card border-b border-border flex-shrink-0"
-      >
-        <div className="max-w-[1100px] mx-auto text-center">
-          <GenomeStrand />
-          <h1 className="text-4xl lg:text-5xl font-extrabold text-foreground mb-3">
-            Leadership Genome
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Leadership Genome is the unique set of signals observed from your senior leaders over time & used to identify Future Leaders
-          </p>
+    <div className="h-full bg-white flex overflow-hidden">
+      {/* Left: main scrollable */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Hero */}
+        <div className="bg-white border-b border-border relative overflow-hidden">
+          <div className="relative z-10 flex justify-center">
+            <div className="w-full max-w-[1020px] px-8 pt-12 pb-10 text-center">
+              <GenomeStrand />
+              <h1 className="text-4xl font-bold text-foreground mt-3 mb-4">
+                Leadership Genome
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Leadership Genome is the unique set of signals observed from your senior leaders over time & used to identify Future Leaders
+              </p>
+            </div>
+          </div>
         </div>
-      </motion.section>
 
-      {/* Main content: Explorer + AI Sidebar */}
-      <div className="flex-1 min-h-0 flex overflow-hidden">
-        {/* Explorer area */}
-        <div className="flex-1 min-w-0 overflow-y-auto py-8 px-6">
-          <div className="max-w-[900px] mx-auto">
+        {/* Content */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-[1020px] py-8 px-8">
             {/* AI Insight banner */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -64,21 +61,21 @@ const LeadershipDNAPage = () => {
             <SignalExplorer />
           </div>
         </div>
+      </div>
 
-        {/* AI Sidebar */}
-        <div className="w-[320px] flex-shrink-0">
-          <SignalAISidebar
-            categoryName="Leadership Genome"
-            categoryColor="#6366f1"
-            aiSummary="Strong executive access patterns indicate leaders who are building visibility with C-suite stakeholders. Multi-source VP recognition shows cross-functional impact. Explore individual signal categories to understand predictive patterns."
-            suggestedPrompts={[
-              "Which signals are most predictive of VP+ advancement?",
-              "Who shows the strongest executive access patterns?",
-              "What anti-patterns should we watch for?",
-              "Compare signal strength across categories",
-            ]}
-          />
-        </div>
+      {/* Right: AI sidebar */}
+      <div className="w-[410px] flex-shrink-0">
+        <SignalAISidebar
+          categoryName="Leadership Genome"
+          categoryColor="#6366f1"
+          aiSummary="Strong executive access patterns indicate leaders who are building visibility with C-suite stakeholders. Multi-source VP recognition shows cross-functional impact. Explore individual signal categories to understand predictive patterns."
+          suggestedPrompts={[
+            "Which signals are most predictive of VP+ advancement?",
+            "Who shows the strongest executive access patterns?",
+            "What anti-patterns should we watch for?",
+            "Compare signal strength across categories",
+          ]}
+        />
       </div>
     </div>
   );
