@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio | Dashboard</title>
+    <meta name="description" content="Modern dashboard application for managing projects and teams" />
+    <meta name="author" content="Lovable" />
+
+    <meta property="og:title" content="Lovable App" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root">
+      <div style="padding:24px;font-family:ui-sans-serif,system-ui;background:#ffffff;color:#111827;min-height:100vh">
+        <h1 style="font-size:18px;font-weight:700;margin-bottom:8px">Loading preview</h1>
+        <p style="opacity:0.8">If this stays blank, a startup error likely occurred.</p>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__APP_MOUNTED__ = false;
+        window.addEventListener("error", function (e) {
+          console.error("[index] script error", e.error || e.message);
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          console.error("[index] unhandledrejection", e.reason);
+        });
+        setTimeout(function () {
+          if (window.__APP_MOUNTED__) return;
+          var root = document.getElementById("root");
+          if (!root) return;
+          root.innerHTML =
+            '<div style="padding:24px;font-family:ui-sans-serif,system-ui">' +
+            '<h1 style="font-size:18px;font-weight:700;margin-bottom:8px">Preview failed to start</h1>' +
+            '<p style="margin-bottom:12px;opacity:0.8">The app bundle did not mount. This is usually caused by a runtime error or a failed module load.</p>' +
+            '<button onclick="window.location.reload()" style="padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);background:white;cursor:pointer">Reload</button>' +
+            '</div>';
+        }, 4000);
+      })();
+    </script>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
