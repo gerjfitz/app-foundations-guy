@@ -38,8 +38,10 @@ const LeadershipDNAPage = () => {
             >
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%)" }} />
               <div className="relative z-10">
-                <h2 className="text-base font-semibold text-foreground mb-1 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-primary" />
+                <h2 className="text-base font-semibold text-foreground mb-1 flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Activity className="w-4 h-4 text-primary" />
+                  </div>
                   Signal Predictive Strength
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
@@ -52,11 +54,11 @@ const LeadershipDNAPage = () => {
                 <div className="flex flex-col items-center">
                   <div
                     className="w-16 h-16 rounded-full flex items-center justify-center border-[3px]"
-                    style={{ borderColor: "hsl(var(--primary))", background: "rgba(249, 115, 22, 0.08)" }}
+                    style={{ borderColor: "#22c55e", background: "linear-gradient(135deg, rgba(34,197,94,0.12), rgba(16,185,129,0.08))" }}
                   >
-                    <span className="text-xl font-bold" style={{ color: "hsl(var(--primary))" }}>30</span>
+                    <span className="text-xl font-bold" style={{ color: "#16a34a" }}>30</span>
                   </div>
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary mt-1.5">Accelerate</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider mt-1.5" style={{ color: "#16a34a" }}>Accelerate</span>
                 </div>
               </div>
             </motion.div>
