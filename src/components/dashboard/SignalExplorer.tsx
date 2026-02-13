@@ -119,18 +119,18 @@ const SignalExplorer = () => {
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
-                    className="flex flex-col items-center px-4 py-4 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40 bg-white"
+                    className="flex flex-col items-center px-4 py-5 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40"
                     style={{
-                      background: `linear-gradient(135deg, ${category.colorLight}, white 60%, ${category.colorLight})`,
+                      background: `linear-gradient(135deg, ${category.color}20 0%, ${category.color}08 40%, white 75%)`,
                     }}
                   >
                     {/* Strength Ring */}
-                    <div className="mb-1.5">
+                    <div className="mb-2">
                       <StrengthRing
                         value={category.strength}
                         color={category.color}
-                        size={60}
-                        strokeWidth={4.5}
+                        size={72}
+                        strokeWidth={5}
                       />
                     </div>
 
@@ -139,7 +139,7 @@ const SignalExplorer = () => {
                       const level = getPredictiveLevel(category.strength);
                       return (
                         <span
-                          className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full mb-2"
+                          className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full mb-3"
                           style={{ backgroundColor: level.bgColor, color: level.color }}
                         >
                           {level.label}
