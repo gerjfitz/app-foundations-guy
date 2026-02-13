@@ -120,14 +120,16 @@ const SignalExplorer = () => {
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
-                    className="flex flex-col items-center px-4 py-4 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md"
-                    style={{ backgroundColor: category.color }}
+                    className="flex flex-col items-center px-4 py-4 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40 bg-white"
+                    style={{
+                      background: `linear-gradient(135deg, ${category.colorLight}, white 60%, ${category.colorLight})`,
+                    }}
                   >
                     {/* Strength Ring */}
                     <div className="mb-1.5">
                       <StrengthRing
                         value={category.strength}
-                        color="#ffffff"
+                        color={category.color}
                         size={60}
                         strokeWidth={4.5}
                       />
@@ -139,7 +141,7 @@ const SignalExplorer = () => {
                       return (
                         <span
                           className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full mb-2"
-                          style={{ backgroundColor: "rgba(255,255,255,0.25)", color: "#fff" }}
+                          style={{ backgroundColor: level.bgColor, color: level.color }}
                         >
                           {level.label}
                         </span>
@@ -147,12 +149,12 @@ const SignalExplorer = () => {
                     })()}
 
                     {/* Title */}
-                    <span className="font-semibold text-white text-sm text-center leading-tight">{category.name}</span>
+                    <span className="font-semibold text-foreground text-sm text-center leading-tight">{category.name}</span>
 
                     {/* Chevron */}
                     <ChevronDown 
                       className={cn(
-                        "h-4 w-4 text-white/70 transition-transform duration-300 mt-1.5",
+                        "h-4 w-4 text-muted-foreground transition-transform duration-300 mt-1.5",
                         isExpanded && "rotate-180"
                       )} 
                     />
