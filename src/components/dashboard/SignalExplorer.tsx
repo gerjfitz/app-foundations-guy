@@ -173,8 +173,38 @@ const SignalExplorer = () => {
                           <div
                             key={idx}
                             ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
-                            className="flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm transition-none"
+                            className="relative flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm transition-none overflow-hidden"
                           >
+                            {/* Genome-inspired animated background */}
+                            <div
+                              className="absolute inset-0 opacity-[0.035] pointer-events-none"
+                              style={{
+                                backgroundImage: `
+                                  repeating-linear-gradient(
+                                    90deg,
+                                    ${category.color} 0px,
+                                    transparent 1px,
+                                    transparent 18px
+                                  ),
+                                  repeating-linear-gradient(
+                                    0deg,
+                                    ${category.color} 0px,
+                                    transparent 1px,
+                                    transparent 40px
+                                  )
+                                `,
+                                backgroundSize: '200% 200%',
+                                animation: 'genome-drift 12s ease-in-out infinite alternate',
+                              }}
+                            />
+                            {/* Flowing helix accent */}
+                            <div
+                              className="absolute -right-8 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full pointer-events-none"
+                              style={{
+                                background: `radial-gradient(circle, ${category.color}08, transparent 70%)`,
+                                animation: 'genome-pulse 8s ease-in-out infinite alternate',
+                              }}
+                            />
                             {/* Strength Ring */}
                             <div className="flex-shrink-0">
                               <StrengthRing
