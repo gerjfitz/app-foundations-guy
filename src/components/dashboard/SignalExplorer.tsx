@@ -113,9 +113,9 @@ const SignalExplorer = () => {
           
           return (
             <div key={category.id}>
-              <div className={cn("flex gap-12", isExpanded ? "items-center" : "items-start")}>
+              <div className={cn("flex gap-10", isExpanded ? "items-center" : "items-start")}>
                 {/* Left: category trigger — solid color with white text */}
-                <div className="w-64 flex-shrink-0">
+                <div className="w-72 flex-shrink-0">
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
