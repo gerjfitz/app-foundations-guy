@@ -177,32 +177,19 @@ const SignalExplorer = () => {
                           >
                             {/* Genome-inspired animated background */}
                             <div
-                              className="absolute inset-0 opacity-[0.035] pointer-events-none"
+                              className="absolute inset-0 pointer-events-none"
                               style={{
-                                backgroundImage: `
-                                  repeating-linear-gradient(
-                                    90deg,
-                                    ${category.color} 0px,
-                                    transparent 1px,
-                                    transparent 18px
-                                  ),
-                                  repeating-linear-gradient(
-                                    0deg,
-                                    ${category.color} 0px,
-                                    transparent 1px,
-                                    transparent 40px
-                                  )
-                                `,
-                                backgroundSize: '200% 200%',
-                                animation: 'genome-drift 12s ease-in-out infinite alternate',
+                                background: `linear-gradient(90deg, transparent 0%, ${category.color}09 30%, ${category.color}15 50%, ${category.color}09 70%, transparent 100%)`,
+                                backgroundSize: '200% 100%',
+                                animation: 'genome-drift 6s ease-in-out infinite alternate',
                               }}
                             />
                             {/* Flowing helix accent */}
                             <div
-                              className="absolute -right-8 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full pointer-events-none"
+                              className="absolute -right-4 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full pointer-events-none"
                               style={{
-                                background: `radial-gradient(circle, ${category.color}08, transparent 70%)`,
-                                animation: 'genome-pulse 8s ease-in-out infinite alternate',
+                                background: `radial-gradient(circle, ${category.color}18, transparent 70%)`,
+                                animation: 'genome-pulse 5s ease-in-out infinite alternate',
                               }}
                             />
                             {/* Strength Ring */}
