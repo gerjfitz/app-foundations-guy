@@ -127,7 +127,12 @@ const SignalExplorer = () => {
                       <div className="h-9 w-9 rounded-lg flex items-center justify-center bg-white/20">
                         <div className="h-3 w-3 rounded-full bg-white" />
                       </div>
-                      <span className="font-medium text-white text-sm">{category.name}</span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-white text-sm">{category.name}</span>
+                        <span className="text-[10px] text-white/70 mt-0.5">
+                          {category.strength}% predictive strength
+                        </span>
+                      </div>
                     </div>
                     <ChevronDown 
                       className={cn(
@@ -135,6 +140,17 @@ const SignalExplorer = () => {
                         isExpanded && "rotate-180"
                       )} 
                     />
+                  </div>
+                  {/* Strength bar beneath the category node */}
+                  <div className="mt-2 px-1">
+                    <div className="h-1.5 rounded-full bg-white/20 overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full bg-white/70"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${category.strength}%` }}
+                        transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
+                      />
+                    </div>
                   </div>
                 </div>
 
