@@ -175,21 +175,11 @@ const SignalExplorer = () => {
                             ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
                             className="relative flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm transition-none overflow-hidden"
                           >
-                            {/* Genome-inspired animated background */}
+                            {/* Subtle gradient accent from right */}
                             <div
                               className="absolute inset-0 pointer-events-none"
                               style={{
-                                background: `linear-gradient(90deg, transparent 0%, ${category.color}09 30%, ${category.color}15 50%, ${category.color}09 70%, transparent 100%)`,
-                                backgroundSize: '200% 100%',
-                                animation: 'genome-drift 6s ease-in-out infinite alternate',
-                              }}
-                            />
-                            {/* Flowing helix accent */}
-                            <div
-                              className="absolute -right-4 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full pointer-events-none"
-                              style={{
-                                background: `radial-gradient(circle, ${category.color}18, transparent 70%)`,
-                                animation: 'genome-pulse 5s ease-in-out infinite alternate',
+                                background: `linear-gradient(270deg, ${category.color}0c 0%, transparent 60%)`,
                               }}
                             />
                             {/* Strength Ring */}
