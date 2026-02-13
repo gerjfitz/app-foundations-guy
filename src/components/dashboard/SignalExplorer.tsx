@@ -124,14 +124,27 @@ const SignalExplorer = () => {
                     style={{ backgroundColor: category.color }}
                   >
                     {/* Strength Ring */}
-                    <div className="mb-2">
+                    <div className="mb-1.5">
                       <StrengthRing
                         value={category.strength}
                         color="#ffffff"
-                        size={48}
-                        strokeWidth={4}
+                        size={60}
+                        strokeWidth={4.5}
                       />
                     </div>
+
+                    {/* Predictive level pill */}
+                    {(() => {
+                      const level = getPredictiveLevel(category.strength);
+                      return (
+                        <span
+                          className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full mb-2"
+                          style={{ backgroundColor: "rgba(255,255,255,0.25)", color: "#fff" }}
+                        >
+                          {level.label}
+                        </span>
+                      );
+                    })()}
 
                     {/* Title */}
                     <span className="font-semibold text-white text-sm text-center leading-tight">{category.name}</span>
