@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signalCategories } from "./GenomeVisual";
 import StrengthRing from "./StrengthRing";
@@ -151,13 +150,10 @@ const SignalExplorer = () => {
                     {/* Title */}
                     <span className="font-semibold text-foreground text-sm text-center leading-tight">{category.name}</span>
 
-                    {/* Chevron */}
-                    <ChevronDown 
-                      className={cn(
-                        "h-4 w-4 text-muted-foreground transition-transform duration-300 mt-1.5",
-                        isExpanded && "rotate-180"
-                      )} 
-                    />
+                    {/* Description */}
+                    <p className="text-[11px] text-muted-foreground text-center leading-relaxed mt-2 px-1">
+                      {category.description}
+                    </p>
                   </div>
                 </div>
 
