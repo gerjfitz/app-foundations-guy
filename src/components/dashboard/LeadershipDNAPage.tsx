@@ -27,15 +27,18 @@ const LeadershipDNAPage = () => {
         {/* Content */}
         <div className="flex justify-center">
           <div className="w-full max-w-[1020px] py-8 px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-              className="relative rounded-2xl border border-border/30 p-7 mb-8 overflow-hidden flex items-center justify-between"
-              style={{
-                background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04) 50%, rgba(168, 85, 247, 0.06))",
-              }}
-            >
+            <div className="flex gap-10">
+              {/* Spacer matching left column width */}
+              <div className="w-72 flex-shrink-0" />
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.15 }}
+                className="relative flex-1 rounded-2xl border border-border/30 p-7 mb-8 overflow-hidden flex items-center justify-between"
+                style={{
+                  background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04) 50%, rgba(168, 85, 247, 0.06))",
+                }}
+              >
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%)" }} />
               <div className="relative z-10">
                 <h2 className="text-base font-semibold text-foreground mb-1 flex items-center gap-2.5">
@@ -62,6 +65,7 @@ const LeadershipDNAPage = () => {
                 </div>
               </div>
             </motion.div>
+            </div>
 
             <SignalExplorer />
           </div>
