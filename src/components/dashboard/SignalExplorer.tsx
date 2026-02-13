@@ -107,7 +107,7 @@ const SignalExplorer = () => {
       </svg>
 
       {/* Vertical list */}
-      <div className="space-y-8">
+      <div className="space-y-12">
         {signalCategories.map((category) => {
           const isExpanded = expandedCategories.has(category.id);
           
