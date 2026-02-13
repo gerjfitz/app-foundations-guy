@@ -120,37 +120,29 @@ const SignalExplorer = () => {
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
-                    className="flex items-center justify-between px-4 py-3.5 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md"
+                    className="flex flex-col items-center px-4 py-4 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md"
                     style={{ backgroundColor: category.color }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-lg flex items-center justify-center bg-white/20">
-                        <div className="h-3 w-3 rounded-full bg-white" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-medium text-white text-sm">{category.name}</span>
-                        <span className="text-[10px] text-white/70 mt-0.5">
-                          {category.strength}% predictive strength
-                        </span>
-                      </div>
+                    {/* Strength Ring */}
+                    <div className="mb-2">
+                      <StrengthRing
+                        value={category.strength}
+                        color="#ffffff"
+                        size={48}
+                        strokeWidth={4}
+                      />
                     </div>
+
+                    {/* Title */}
+                    <span className="font-semibold text-white text-sm text-center leading-tight">{category.name}</span>
+
+                    {/* Chevron */}
                     <ChevronDown 
                       className={cn(
-                        "h-5 w-5 text-white/70 transition-transform duration-300 flex-shrink-0",
+                        "h-4 w-4 text-white/70 transition-transform duration-300 mt-1.5",
                         isExpanded && "rotate-180"
                       )} 
                     />
-                  </div>
-                  {/* Strength bar beneath the category node */}
-                  <div className="mt-2 px-1">
-                    <div className="h-1.5 rounded-full bg-white/20 overflow-hidden">
-                      <motion.div
-                        className="h-full rounded-full bg-white/70"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${category.strength}%` }}
-                        transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
-                      />
-                    </div>
                   </div>
                 </div>
 
