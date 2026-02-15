@@ -410,7 +410,7 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
                       }}
                     >
                       <Activity className="w-3.5 h-3.5 text-white/80" />
-                      Genome Signals
+                      Genome
                     </div>
                   </div>
 
