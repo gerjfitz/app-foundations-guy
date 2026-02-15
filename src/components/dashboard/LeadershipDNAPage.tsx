@@ -26,12 +26,12 @@ const LeadershipDNAPage = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.15 }}
-                className="relative rounded-2xl border border-border/30 p-6 mt-8 overflow-hidden flex items-center justify-center gap-6 max-w-2xl mx-auto"
+                className="relative rounded-2xl border border-border/20 p-6 mt-8 overflow-hidden flex items-center justify-center gap-6 w-full"
                 style={{
-                  background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04) 50%, rgba(168, 85, 247, 0.06))",
+                  background: "linear-gradient(135deg, rgba(249, 115, 22, 0.03), rgba(168, 85, 247, 0.02) 50%, rgba(168, 85, 247, 0.03))",
                 }}
               >
-                <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%)" }} />
+                <div className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168, 85, 247, 0.05), transparent 70%)" }} />
                 <div className="relative z-10 text-left flex-1">
                   <h2 className="text-base font-semibold text-foreground mb-1 flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
