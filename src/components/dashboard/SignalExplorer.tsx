@@ -99,7 +99,7 @@ const SignalExplorer = () => {
               layout
               transition={{ layout: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } }}
             >
-              <div className="flex gap-0 items-start">
+              <div className={cn("flex gap-0", isExpanded ? "items-start" : "items-center")}>
                 {/* Left: category trigger */}
                 <motion.div 
                   className="w-72 flex-shrink-0 pt-1"
@@ -158,19 +158,18 @@ const SignalExplorer = () => {
                 </motion.div>
 
                 {/* Connector line */}
-                <div className="flex items-center flex-shrink-0 pt-1" style={{ width: '40px', marginTop: '80px' }}>
-                  <motion.div 
-                    className="w-full h-[2px] rounded-full"
-                    animate={{ 
-                      backgroundColor: `${category.color}${isExpanded ? '40' : '20'}`,
-                    }}
-                    transition={{ duration: 0.3 }}
+                <div 
+                  className="flex items-center flex-shrink-0" 
+                  style={{ width: '40px', ...(isExpanded ? { marginTop: '80px' } : {}) }}
+                >
+                  <div 
+                    className="w-full h-[2px] rounded-full transition-colors duration-300"
                     style={{ backgroundColor: `${category.color}${isExpanded ? '40' : '20'}` }}
                   />
                 </div>
 
                 {/* Right: sub-signals or collapsed summary */}
-                <div className="flex-1 min-w-0 pt-1">
+                <div className={cn("flex-1 min-w-0", isExpanded && "pt-1")}>
                   <AnimatePresence mode="wait" initial={false}>
                     {isExpanded ? (
                       <motion.div
