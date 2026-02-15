@@ -401,19 +401,22 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
                       <line x1="0" y1="12" x2="60" y2="12" stroke="currentColor" strokeWidth="1.5" className="text-border" strokeDasharray="4 3" />
                       <circle cx="30" cy="12" r="4" fill="currentColor" className="text-muted-foreground/40" />
                     </svg>
-                    {/* Genome signal pill */}
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-foreground/20 font-semibold text-sm text-foreground z-10 bg-white">
-                      <Activity className="w-3.5 h-3.5 text-muted-foreground" />
+                    {/* Genome signal pill - gradient */}
+                    <div
+                      className="flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm text-white z-10 border-0"
+                      style={{
+                        background: "linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)",
+                        boxShadow: "0 2px 8px rgba(99,102,241,0.25)",
+                      }}
+                    >
+                      <Activity className="w-3.5 h-3.5 text-white/80" />
                       Genome Signals
                     </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground leading-relaxed text-center mb-1">
-                    {selectedBehavior.description}
-                  </p>
-                  <p className="text-xs text-muted-foreground/70 text-center">
-                    This behaviour maps to <span className="font-medium text-foreground">{mappedSignals.length}</span> genome signal{mappedSignals.length !== 1 ? 's' : ''} — signals that predict this leadership capability based on observed patterns.
+                  {/* Single combined summary */}
+                  <p className="text-sm text-muted-foreground leading-relaxed text-center">
+                    {selectedBehavior.description} This behaviour maps to <span className="font-medium text-foreground">{mappedSignals.length}</span> genome signal{mappedSignals.length !== 1 ? 's' : ''} that predict this capability from observed leadership patterns.
                   </p>
                 </div>
 
