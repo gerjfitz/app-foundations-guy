@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Activity } from "lucide-react";
+import { ChevronDown, Activity, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signalCategories } from "./GenomeVisual";
 import StrengthRing from "./StrengthRing";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const getPredictiveLevel = (pct: number) => {
   if (pct >= 70) return { label: "High", color: "#22c55e", bgColor: "rgba(34,197,94,0.08)" };
@@ -52,6 +53,22 @@ const cleadMapping: Record<string, string[]> = {
   "anti-patterns-6": [],
 };
 
+/* Helper: get all genome sub-signals mapped to a given C-LEAD behavior */
+const getSignalsForBehavior = (behaviorId: string) => {
+  const results: { categoryName: string; categoryColor: string; signalName: string; strength: number }[] = [];
+  Object.entries(cleadMapping).forEach(([key, ids]) => {
+    if (!ids.includes(behaviorId)) return;
+    const [catId, idxStr] = [key.substring(0, key.lastIndexOf("-")), key.substring(key.lastIndexOf("-") + 1)];
+    const category = signalCategories.find(c => c.id === catId);
+    if (!category) return;
+    const idx = parseInt(idxStr, 10);
+    const sub = category.subSignals[idx];
+    if (!sub) return;
+    results.push({ categoryName: category.name, categoryColor: category.color, signalName: sub.name, strength: sub.predictiveStrength });
+  });
+  return results;
+};
+
 interface SignalExplorerProps {
   showCleadMapping?: boolean;
 }
@@ -61,6 +78,7 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
     new Set(signalCategories.length > 0 ? [signalCategories[0].id] : [])
   );
   const [lines, setLines] = useState<{ path: string; color: string; key: string }[]>([]);
+  const [selectedBehavior, setSelectedBehavior] = useState<typeof cleadBehaviors[number] | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const behaviorRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -291,9 +309,10 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
                                         className="flex items-center gap-1.5 mt-3"
                                       >
                                         {matchedBehaviors.map(behavior => (
-                                          <span
+                                          <button
                                             key={behavior!.id}
-                                            className="text-[11px] font-semibold px-3 py-1.5 rounded-full border"
+                                            onClick={(e) => { e.stopPropagation(); setSelectedBehavior(behavior!); }}
+                                            className="text-[11px] font-semibold px-3 py-1.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity"
                                             style={{
                                               color: behavior!.color,
                                               backgroundColor: `${behavior!.color}10`,
@@ -301,7 +320,7 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
                                             }}
                                           >
                                             {behavior!.name}
-                                          </span>
+                                          </button>
                                         ))}
                                       </motion.div>
                                     )}
@@ -358,6 +377,65 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
           );
         })}
       </div>
+
+      {/* C-LEAD behavior detail dialog */}
+      <Dialog open={!!selectedBehavior} onOpenChange={(open) => { if (!open) setSelectedBehavior(null); }}>
+        <DialogContent className="sm:max-w-md">
+          {selectedBehavior && (() => {
+            const mappedSignals = getSignalsForBehavior(selectedBehavior.id);
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-3">
+                    <span
+                      className="text-sm font-semibold px-3 py-1.5 rounded-full border"
+                      style={{
+                        color: selectedBehavior.color,
+                        backgroundColor: `${selectedBehavior.color}10`,
+                        borderColor: `${selectedBehavior.color}25`,
+                      }}
+                    >
+                      {selectedBehavior.name}
+                    </span>
+                    <span className="text-base font-semibold text-foreground">× Genome Signals</span>
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    The <span className="font-medium text-foreground">{selectedBehavior.name}</span> behaviour maps to {mappedSignals.length} genome signal{mappedSignals.length !== 1 ? 's' : ''} across your leadership framework.
+                  </p>
+                  <div className="space-y-2">
+                    {mappedSignals.map((sig, i) => {
+                      const level = getPredictiveLevel(sig.strength);
+                      return (
+                        <div
+                          key={i}
+                          className="flex items-center gap-3 px-4 py-3 rounded-lg border border-border/40 bg-muted/20"
+                        >
+                          <div
+                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: sig.categoryColor }}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{sig.signalName}</p>
+                            <p className="text-xs text-muted-foreground truncate">{sig.categoryName}</p>
+                          </div>
+                          <span
+                            className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: level.bgColor, color: level.color }}
+                          >
+                            {level.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
