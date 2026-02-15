@@ -273,10 +273,6 @@ const TalentMagnetModal = ({ magnet, open, onClose }: { magnet: TalentMagnet; op
                 </div>
                 <DialogDescription className="text-sm">{magnet.role}</DialogDescription>
               </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-3xl font-bold text-foreground">{magnet.magnetScore}</p>
-                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Magnet Score</p>
-              </div>
             </div>
           </DialogHeader>
 
@@ -285,24 +281,6 @@ const TalentMagnetModal = ({ magnet, open, onClose }: { magnet: TalentMagnet; op
             <p className="text-sm text-foreground/80 leading-relaxed">{magnet.insight}</p>
           </div>
 
-          {/* Summary stats row */}
-          <div className="flex items-center gap-6 mt-5">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{totalPipeline}</span> in pipeline</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-rose-500" />
-              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{magnet.departed.length}</span> departed</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{magnet.alumni.length}</span> alumni</span>
-            </div>
-            <div className="ml-auto text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">{totalInfluence}</span> total talent influenced
-            </div>
-          </div>
         </div>
 
         {/* Three lanes */}
@@ -312,16 +290,11 @@ const TalentMagnetModal = ({ magnet, open, onClose }: { magnet: TalentMagnet; op
               <div key={lane.title} className="flex flex-col">
                 {/* Lane header */}
                 <div className={cn("flex items-center gap-2.5 mb-4 pb-3 border-b-2", lane.accentBorder)}>
-                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", lane.accentBg)}>
-                    <lane.icon className={cn("w-4 h-4", lane.accentText)} />
+                  <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center text-[12px] font-bold text-white", lane.dotColor)}>
+                    {lane.count}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-foreground">{lane.title}</h4>
-                      <span className={cn("w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white", lane.dotColor)}>
-                        {lane.count}
-                      </span>
-                    </div>
+                    <h4 className="text-sm font-bold text-foreground">{lane.title}</h4>
                     <p className="text-[10px] text-muted-foreground">{lane.subtitle}</p>
                   </div>
                 </div>
