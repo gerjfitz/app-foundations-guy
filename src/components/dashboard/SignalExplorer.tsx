@@ -68,12 +68,12 @@ const SignalExplorer = () => {
         const endX = behaviorRect.left - containerRect.left;
         const endY = behaviorRect.top + behaviorRect.height / 2 - containerRect.top;
 
-        const midX = startX + (endX - startX) * 0.5;
+        const midX = startX + (endX - startX) * 0.45;
 
         newLines.push({
           key: `${categoryId}-${idx}`,
           path: `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`,
-          color: `${category.color}40`,
+          color: `${category.color}50`,
         });
       });
     });
@@ -82,8 +82,9 @@ const SignalExplorer = () => {
   }, [expandedCategories]);
 
   useEffect(() => {
-    const timer = setTimeout(updateLines, 150);
-    const resizeTimer = setTimeout(updateLines, 400);
+    // Delay line calculation to allow expand animation to settle
+    const timer = setTimeout(updateLines, 300);
+    const resizeTimer = setTimeout(updateLines, 500);
     window.addEventListener('resize', updateLines);
     return () => {
       clearTimeout(timer);
@@ -105,11 +106,11 @@ const SignalExplorer = () => {
             d={line.path}
             fill="none"
             stroke={line.color}
-            strokeWidth="2"
+            strokeWidth="3"
             strokeLinecap="round"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.4, delay: idx * 0.04, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.5, delay: 0.15 + idx * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
           />
         ))}
       </svg>
