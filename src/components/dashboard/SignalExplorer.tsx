@@ -21,15 +21,22 @@ const SignalExplorer = () => {
   const behaviorRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const toggleCategory = (categoryId: string) => {
+    // Clear all lines immediately to prevent stale paths
+    setLines([]);
     setExpandedCategories(prev => {
       const newSet = new Set(prev);
       if (newSet.has(categoryId)) {
         newSet.delete(categoryId);
+        // Also clean up stale behavior refs for this category
+        const category = signalCategories.find(c => c.id === categoryId);
+        if (category) {
+          category.subSignals.forEach((_, idx) => {
+            behaviorRefs.current.delete(`${categoryId}-${idx}`);
+          });
+        }
       } else {
         newSet.add(categoryId);
       }
-      // Clear lines immediately so stale paths don't linger
-      setLines(l => l.filter(line => !line.key.startsWith(categoryId) || newSet.has(categoryId)));
       return newSet;
     });
   };
