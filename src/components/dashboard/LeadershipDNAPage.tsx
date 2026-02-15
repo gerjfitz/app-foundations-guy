@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Activity } from "lucide-react";
+import { Activity, GitCompareArrows } from "lucide-react";
+import { cn } from "@/lib/utils";
 import SignalExplorer from "./SignalExplorer";
 import SignalAISidebar from "./SignalAISidebar";
 import GenomeStrand from "./GenomeStrand";
 
 const LeadershipDNAPage = () => {
+  const [showCleadMapping, setShowCleadMapping] = useState(false);
   return (
     <div className="h-full bg-white flex overflow-hidden">
       {/* Left: main scrollable */}
@@ -27,6 +30,31 @@ const LeadershipDNAPage = () => {
         {/* Content */}
         <div className="flex justify-center">
           <div className="w-full max-w-[1020px] py-8 px-8">
+            {/* Toggle for C-LEAD mapping */}
+            <div className="flex justify-end mb-6">
+              <button
+                onClick={() => setShowCleadMapping(prev => !prev)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all",
+                  showCleadMapping 
+                    ? "bg-primary/10 border-primary/30 text-primary" 
+                    : "bg-muted/30 border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
+                )}
+              >
+                <GitCompareArrows className="w-4 h-4" />
+                Cisco Leadership Mapping
+                <div className={cn(
+                  "w-8 h-[18px] rounded-full relative transition-colors duration-200",
+                  showCleadMapping ? "bg-primary" : "bg-border"
+                )}>
+                  <div className={cn(
+                    "absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform duration-200",
+                    showCleadMapping ? "translate-x-[16px]" : "translate-x-[2px]"
+                  )} />
+                </div>
+              </button>
+            </div>
+
             {/* Signal Predictive Strength — below hero */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -62,7 +90,7 @@ const LeadershipDNAPage = () => {
               </div>
             </motion.div>
 
-            <SignalExplorer />
+            <SignalExplorer showCleadMapping={showCleadMapping} />
           </div>
         </div>
       </div>
