@@ -14,11 +14,11 @@ const getPredictiveLevel = (pct: number) => {
 
 /* ── C-LEAD behaviour mapping to genome sub-signals ── */
 const cleadBehaviors = [
-  { id: "collaborate", name: "Collaborate", color: "#3b82f6" },
-  { id: "learn", name: "Learn", color: "#8b5cf6" },
-  { id: "execute", name: "Execute", color: "#f97316" },
-  { id: "accelerate", name: "Accelerate", color: "#10b981" },
-  { id: "disrupt", name: "Disrupt", color: "#ec4899" },
+  { id: "collaborate", name: "Collaborate", color: "#3b82f6", description: "Leaders who build cross-functional relationships and drive alignment across teams, fostering trust and shared purpose." },
+  { id: "learn", name: "Learn", color: "#8b5cf6", description: "Leaders who actively seek growth, mentor others, and create environments where continuous development is valued." },
+  { id: "execute", name: "Execute", color: "#f97316", description: "Leaders who translate strategy into measurable outcomes, driving accountability and operational excellence." },
+  { id: "accelerate", name: "Accelerate", color: "#10b981", description: "Leaders who identify opportunities to scale impact, remove friction, and speed up value delivery." },
+  { id: "disrupt", name: "Disrupt", color: "#ec4899", description: "Leaders who challenge the status quo, introduce bold ideas, and reshape how the organisation thinks and operates." },
 ] as const;
 
 // Maps: genomeCategory-subSignalIndex → C-LEAD behavior ids
@@ -380,40 +380,55 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
 
       {/* C-LEAD behavior detail dialog */}
       <Dialog open={!!selectedBehavior} onOpenChange={(open) => { if (!open) setSelectedBehavior(null); }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
           {selectedBehavior && (() => {
             const mappedSignals = getSignalsForBehavior(selectedBehavior.id);
             return (
               <>
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-3">
-                    <span
-                      className="text-sm font-semibold px-3 py-1.5 rounded-full border"
-                      style={{
-                        color: selectedBehavior.color,
-                        backgroundColor: `${selectedBehavior.color}10`,
-                        borderColor: `${selectedBehavior.color}25`,
-                      }}
+                {/* Visual header with connected pills */}
+                <div className="px-6 pt-6 pb-4">
+                  <div className="flex items-center justify-center gap-0 mb-5">
+                    {/* Cisco behaviour pill */}
+                    <div
+                      className="flex items-center gap-2 px-4 py-2 rounded-full border-2 font-semibold text-sm z-10 bg-white"
+                      style={{ color: selectedBehavior.color, borderColor: selectedBehavior.color }}
                     >
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: selectedBehavior.color }} />
                       {selectedBehavior.name}
-                    </span>
-                    <span className="text-base font-semibold text-foreground">× Genome Signals</span>
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="mt-2">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    The <span className="font-medium text-foreground">{selectedBehavior.name}</span> behaviour maps to {mappedSignals.length} genome signal{mappedSignals.length !== 1 ? 's' : ''} across your leadership framework.
+                    </div>
+                    {/* SVG connector */}
+                    <svg width="60" height="24" viewBox="0 0 60 24" className="flex-shrink-0 -mx-1">
+                      <line x1="0" y1="12" x2="60" y2="12" stroke="currentColor" strokeWidth="1.5" className="text-border" strokeDasharray="4 3" />
+                      <circle cx="30" cy="12" r="4" fill="currentColor" className="text-muted-foreground/40" />
+                    </svg>
+                    {/* Genome signal pill */}
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-foreground/20 font-semibold text-sm text-foreground z-10 bg-white">
+                      <Activity className="w-3.5 h-3.5 text-muted-foreground" />
+                      Genome Signals
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed text-center mb-1">
+                    {selectedBehavior.description}
                   </p>
+                  <p className="text-xs text-muted-foreground/70 text-center">
+                    This behaviour maps to <span className="font-medium text-foreground">{mappedSignals.length}</span> genome signal{mappedSignals.length !== 1 ? 's' : ''} — signals that predict this leadership capability based on observed patterns.
+                  </p>
+                </div>
+
+                {/* Signal list */}
+                <div className="px-6 pb-6">
                   <div className="space-y-2">
                     {mappedSignals.map((sig, i) => {
                       const level = getPredictiveLevel(sig.strength);
                       return (
                         <div
                           key={i}
-                          className="flex items-center gap-3 px-4 py-3 rounded-lg border border-border/40 bg-muted/20"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/40 bg-muted/20"
                         >
                           <div
-                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                             style={{ backgroundColor: sig.categoryColor }}
                           />
                           <div className="flex-1 min-w-0">
