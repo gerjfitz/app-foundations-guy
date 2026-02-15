@@ -28,6 +28,8 @@ const SignalExplorer = () => {
       } else {
         newSet.add(categoryId);
       }
+      // Clear lines immediately so stale paths don't linger
+      setLines(l => l.filter(line => !line.key.startsWith(categoryId) || newSet.has(categoryId)));
       return newSet;
     });
   };
@@ -161,8 +163,15 @@ const SignalExplorer = () => {
                   </div>
                 </div>
 
-                {/* Gap for ribbons */}
-                <div className="flex-shrink-0" style={{ width: '48px' }} />
+                {/* Gap / connector between left card and right panel */}
+                <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '48px' }}>
+                  {!isExpanded && (
+                    <div 
+                      className="w-full border-t-2 border-dashed rounded-full"
+                      style={{ borderColor: `${category.color}30` }}
+                    />
+                  )}
+                </div>
 
                 {/* Right: sub-signals or collapsed summary */}
                 <div className="flex-1 min-w-0">
