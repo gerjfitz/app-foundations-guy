@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import SignalAISidebar from "./SignalAISidebar";
 
 interface TimelineEvent {
   id: string;
@@ -54,7 +55,7 @@ const typeColors = {
   join: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700",
   behavior: "bg-primary/10 text-primary border-2 border-primary/20",
   signal: "bg-accent-magenta/10 text-accent-magenta border-2 border-accent-magenta/20",
-  promotion: "bg-success/10 text-success border-2 border-success/20",
+  promotion: "bg-success/10 text-success border-success/20",
   gap: "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-2 border-amber-300 dark:border-amber-700",
   target: "bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 border-2 border-sky-300 dark:border-sky-700",
 };
@@ -68,11 +69,10 @@ const badgeColors: Record<string, string> = {
   "TARGET ROLE": "bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 border-sky-300",
 };
 
-// Signal Behaviors for the profile mapping - matching the taxonomy
 interface SignalBehavior {
   name: string;
   description: string;
-  strength: number; // 0-100 percentage
+  strength: number;
   trend: "up" | "down" | "stable";
 }
 
@@ -108,7 +108,7 @@ const signalCategories: SignalCategory[] = [
     progressColor: "bg-purple-500",
     behaviors: [
       { name: "Enterprise Transformation Programme Role", description: "Leads organization-wide change initiatives that reshape how the business operates.", strength: 92, trend: "up" },
-      { name: "Technical → Advisor Role Transition", description: "Successfully transitioned from technical execution to strategic advisory, demonstrating executive readiness.", strength: 78, trend: "up" },
+      { name: "Technical → Advisor Role Transition", description: "Successfully transitioned from technical execution to strategic advisory.", strength: 78, trend: "up" },
     ]
   },
   { 
@@ -120,7 +120,7 @@ const signalCategories: SignalCategory[] = [
     progressColor: "bg-blue-500",
     behaviors: [
       { name: "Courageous Voice in Senior Forums", description: "Speaks truth to power and challenges the status quo in executive settings.", strength: 85, trend: "up" },
-      { name: "Speaking Up for Others", description: "Actively advocates for team members and peers, amplifying voices that might otherwise go unheard.", strength: 72, trend: "stable" },
+      { name: "Speaking Up for Others", description: "Actively advocates for team members and peers.", strength: 72, trend: "stable" },
     ]
   },
   { 
@@ -131,8 +131,8 @@ const signalCategories: SignalCategory[] = [
     bgColor: "bg-orange-50 dark:bg-orange-900/20",
     progressColor: "bg-orange-500",
     behaviors: [
-      { name: "Sustained Excellence (3+ Years)", description: "Consistently delivers exceptional results over an extended period, demonstrating reliability and commitment.", strength: 94, trend: "up" },
-      { name: "Organizational Transformation Leadership", description: "Leads fundamental change in how the organization operates, driving lasting impact.", strength: 80, trend: "up" },
+      { name: "Sustained Excellence (3+ Years)", description: "Consistently delivers exceptional results over an extended period.", strength: 94, trend: "up" },
+      { name: "Organizational Transformation Leadership", description: "Leads fundamental change in how the organization operates.", strength: 80, trend: "up" },
     ]
   },
   { 
@@ -143,20 +143,18 @@ const signalCategories: SignalCategory[] = [
     bgColor: "bg-teal-50 dark:bg-teal-900/20",
     progressColor: "bg-teal-500",
     behaviors: [
-      { name: "People Development & Mentorship", description: "Actively grows and mentors team members, creating development opportunities that accelerate careers.", strength: 88, trend: "up" },
-      { name: "Team Wellbeing Advocacy", description: "Prioritizes team health and work-life balance, championing policies that support sustainable performance.", strength: 65, trend: "stable" },
+      { name: "People Development & Mentorship", description: "Actively grows and mentors team members.", strength: 88, trend: "up" },
+      { name: "Team Wellbeing Advocacy", description: "Prioritizes team health and work-life balance.", strength: 65, trend: "stable" },
     ]
   },
 ];
 
-// Helper function to get signal level from strength
 const getSignalLevel = (strength: number): "Strong" | "Medium" | "Low" => {
   if (strength >= 75) return "Strong";
   if (strength >= 50) return "Medium";
   return "Low";
 };
 
-// Recognition data for each signal behavior
 const behaviorRecognitions: Record<string, { summary: string; recognitions: { from: string; role: string; quote: string; date: string }[] }> = {
   "CEO/C-Suite Direct Access": {
     summary: "Regularly interacts with and receives recognition from C-level executives, indicating trust and visibility at the highest organizational levels.",
@@ -225,7 +223,6 @@ const behaviorRecognitions: Record<string, { summary: string; recognitions: { fr
   },
 };
 
-// Senior leaders strong in each signal behavior
 const seniorLeadersForBehavior: Record<string, { name: string; role: string; image: string }[]> = {
   "CEO/C-Suite Direct Access": [
     { name: "Michael Ross", role: "CEO", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" },
@@ -264,27 +261,19 @@ const seniorLeadersForBehavior: Record<string, { name: string; role: string; ima
   ],
 };
 
-const TrendIcon = ({ trend }: { trend: "up" | "down" | "stable" }) => {
-  if (trend === "up") return <TrendingUp className="h-3 w-3 text-emerald-500" />;
-  if (trend === "down") return <TrendingDown className="h-3 w-3 text-destructive" />;
-  return <Minus className="h-3 w-3 text-muted-foreground" />;
-};
-
 const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
   const [activeTab, setActiveTab] = useState<"overview" | "timeline">("overview");
   const [selectedBehavior, setSelectedBehavior] = useState<SignalBehavior | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<SignalCategory | null>(null);
 
   useEffect(() => {
-    // Ensure we always start at the top when entering a profile.
     requestAnimationFrame(() => {
       const container = document.getElementById("app-scroll-container");
       container?.scrollTo({ top: 0, left: 0, behavior: "auto" });
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     });
   }, [leader.id]);
-  
-  // Add gap analysis and target role to timeline if not present
+
   const enhancedTimeline = [...leader.timeline];
   if (!enhancedTimeline.find(e => e.type === "gap")) {
     enhancedTimeline.push({
@@ -312,99 +301,67 @@ const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
     enhancedTimeline.find(e => e.type === "signal") || null
   );
 
-  // Calculate signal stats
   const allBehaviors = signalCategories.flatMap(c => c.behaviors);
   const strongCount = allBehaviors.filter(b => b.strength >= 75).length;
-  const mediumCount = allBehaviors.filter(b => b.strength >= 50 && b.strength < 75).length;
-  const lowCount = allBehaviors.filter(b => b.strength < 50).length;
 
-  // Calculate overall category strength
-  const getCategoryStrength = (category: SignalCategory) => {
-    const avg = category.behaviors.reduce((sum, b) => sum + b.strength, 0) / category.behaviors.length;
-    return Math.round(avg);
-  };
+  const behaviorDataForModal = selectedBehavior ? behaviorRecognitions[selectedBehavior.name] : null;
 
-  const behaviorData = selectedBehavior ? behaviorRecognitions[selectedBehavior.name] : null;
-  const seniorLeaders = selectedBehavior ? seniorLeadersForBehavior[selectedBehavior.name] || [] : [];
+  const firstName = leader.name.split(' ')[0];
 
   return (
-    <div className="min-h-full bg-page-background">
-      <div className="max-w-[1100px] mx-auto py-8">
-        {/* Back Button */}
-        <Button
-          variant="ghost"
-          onClick={onBack}
-          className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Pipeline
-        </Button>
+    <div className="h-full bg-white flex overflow-hidden">
+      {/* Left: main scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Back button */}
+        <div className="border-b border-border bg-white sticky top-0 z-10">
+          <div className="max-w-[1020px] mx-auto px-8">
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              className="my-3 -ml-2 text-muted-foreground hover:text-foreground"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Back to Pipeline
+            </Button>
+          </div>
+        </div>
 
-        {/* Hero Header Panel */}
-        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
-          <div className="flex items-start justify-between gap-6">
-            {/* Left Section - Avatar & Info */}
-            <div className="flex items-start gap-6 flex-1">
-              {/* Avatar with Tier Badge */}
-              <div className="relative">
+        {/* Hero Header */}
+        <div className="bg-white border-b border-border">
+          <div className="max-w-[1020px] mx-auto px-8 py-8">
+            <div className="flex items-start gap-6">
+              {/* Avatar */}
+              <div className="relative flex-shrink-0">
                 <img
                   src={leader.image}
                   alt={leader.name}
-                  className="h-36 w-36 rounded-full object-cover border-4 border-card shadow-lg"
+                  className="h-24 w-24 rounded-2xl object-cover border-2 border-background shadow-md"
                 />
                 <Badge 
-                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-success text-white border-0 text-xs px-3 py-1 whitespace-nowrap uppercase font-semibold"
+                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-emerald-500 text-white border-0 text-[10px] px-2.5 py-0.5 whitespace-nowrap uppercase font-bold"
                 >
                   Accelerate
                 </Badge>
               </div>
 
-              {/* Name & Role */}
-              <div className="pt-2">
+              {/* Name & meta */}
+              <div className="flex-1 min-w-0 pt-1">
                 <h1 className="text-3xl font-bold text-foreground">{leader.name}</h1>
-                <p className="text-muted-foreground text-lg mb-4">{leader.role}</p>
+                <p className="text-muted-foreground text-base mt-1">{leader.role}</p>
 
-                {/* Stats Cards */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-4">
                   <div className="bg-muted/50 rounded-lg px-4 py-2 border border-border">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Current Level</p>
-                    <p className="font-semibold text-foreground">{leader.currentLevel || "Director"}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Current Level</p>
+                    <p className="font-semibold text-foreground text-sm">{leader.currentLevel || "Director"}</p>
                   </div>
                   <div className="bg-muted/50 rounded-lg px-4 py-2 border border-border">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Time in Role</p>
-                    <p className="font-semibold text-foreground">{leader.timeInRole || leader.tenure}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Time in Role</p>
+                    <p className="font-semibold text-foreground text-sm">{leader.timeInRole || leader.tenure}</p>
                   </div>
                   <div className="bg-primary/5 rounded-lg px-4 py-2 border border-primary/20">
-                    <p className="text-xs text-primary uppercase tracking-wide">Predicted Role</p>
-                    <p className="font-semibold text-primary">{leader.predictedRole}</p>
+                    <p className="text-[10px] text-primary uppercase tracking-wide">Predicted Role</p>
+                    <p className="font-semibold text-primary text-sm">{leader.predictedRole}</p>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Section - Ask AI Panel */}
-            <div className="w-80 flex-shrink-0">
-              <div className="rounded-xl p-5 border border-fuchsia-200/50" style={{ background: 'linear-gradient(135deg, rgba(199, 118, 207, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%)' }}>
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(199, 118, 207, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%)' }}>
-                    <Sparkles className="w-5 h-5 text-fuchsia-500" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">Ask AI</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Get personalized insights about {leader.name.split(' ')[0]}'s development path and potential.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2 bg-fuchsia-50 border-fuchsia-200 text-fuchsia-600 hover:bg-fuchsia-100 hover:text-fuchsia-700"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Ask AI
-                  </Button>
                 </div>
               </div>
             </div>
@@ -412,449 +369,327 @@ const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-border mb-8">
-          <button
-            onClick={() => setActiveTab("overview")}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === "overview" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            OVERVIEW
-            {activeTab === "overview" && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("timeline")}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === "timeline" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            CAREER TIMELINE
-            {activeTab === "timeline" && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-            )}
-          </button>
+        <div className="bg-white border-b border-border sticky top-[52px] z-10">
+          <div className="max-w-[1020px] mx-auto px-8 flex gap-8">
+            <button
+              onClick={() => setActiveTab("overview")}
+              className={cn(
+                "pb-3 pt-4 text-sm font-medium transition-colors relative",
+                activeTab === "overview" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              OVERVIEW
+              {activeTab === "overview" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />}
+            </button>
+            <button
+              onClick={() => setActiveTab("timeline")}
+              className={cn(
+                "pb-3 pt-4 text-sm font-medium transition-colors relative",
+                activeTab === "timeline" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              CAREER TIMELINE
+              {activeTab === "timeline" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />}
+            </button>
+          </div>
         </div>
 
         {/* Content */}
-        {activeTab === "overview" && (
-          <div className="space-y-8">
-            {/* AI Summary and Signal Overview - Two separate panels */}
-            <div className="grid grid-cols-3 gap-6">
-              {/* Left: AI Summary Panel (larger) */}
-              <div className="col-span-2 bg-card rounded-2xl border border-border p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(199, 118, 207, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%)' }}>
-                    <Sparkles className="h-5 w-5 text-fuchsia-500" />
+        <div className="max-w-[1020px] mx-auto px-8 py-8">
+          {activeTab === "overview" && (
+            <div className="space-y-8">
+              {/* AI Summary + Signal Overview */}
+              <div className="grid grid-cols-3 gap-6">
+                <div className="col-span-2 bg-card rounded-2xl border border-border p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(199, 118, 207, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%)' }}>
+                      <Sparkles className="h-5 w-5 text-fuchsia-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground">AI Leadership Summary</h3>
+                      <p className="text-xs text-muted-foreground">Generated from behavioral signals and recognition data</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-foreground">AI Leadership Summary</h3>
-                    <p className="text-xs text-muted-foreground">Generated from behavioral signals and recognition data</p>
-                  </div>
+                  <p className="text-foreground leading-relaxed">
+                    <span className="font-semibold">{leader.name}</span> is a high-potential leader demonstrating exceptional 
+                    readiness for the <span className="font-semibold text-primary">{leader.predictedRole}</span> role. 
+                    Over the past {leader.tenure}, they have consistently exhibited strong signals in customer advocacy, 
+                    strategic decision-making, and cross-functional collaboration.
+                  </p>
                 </div>
-                
-                <p className="text-foreground leading-relaxed">
-                  <span className="font-semibold">{leader.name}</span> is a high-potential leader demonstrating exceptional 
-                  readiness for the <span className="font-semibold text-primary">{leader.predictedRole}</span> role. 
-                  Over the past {leader.tenure}, they have consistently exhibited strong signals in customer advocacy, 
-                  strategic decision-making, and cross-functional collaboration.
-                </p>
+
+                <div className="col-span-1 bg-card rounded-2xl border border-border p-5">
+                  <p className="text-sm font-semibold text-foreground mb-4">Signal Overview</p>
+                  <ul className="space-y-2.5">
+                    {[
+                      "Demonstrates 8 of 10 key VP behaviors",
+                      "Recognized 4.2x per quarter (top 5%)",
+                      "Consistent pattern for 18 months",
+                      "Operating at VP scope while Director",
+                      "Recognized by 15+ people across org",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-3 text-sm">
+                        <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-emerald-600" />
+                        </div>
+                        <span className="text-foreground">{item}</span>
+                      </li>
+                    ))}
+                    <li className="flex items-center gap-3 text-sm">
+                      <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                        <TrendingUp className="h-3 w-3 text-emerald-600" />
+                      </div>
+                      <span className="text-foreground">Signal accelerating (+18 points in 12mo)</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Right: Signal Overview Panel (smaller) */}
-              <div className="col-span-1 bg-card rounded-2xl border border-border p-5">
-                <p className="text-sm font-semibold text-foreground mb-4">Signal Overview</p>
-                <ul className="space-y-2.5">
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Demonstrates 8 of 10 key VP behaviors</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Recognized 4.2x per quarter (top 5%)</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Consistent pattern for 18 months</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Operating at VP scope while Director</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Recognized by 15+ people across org</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                      <TrendingUp className="h-3 w-3 text-success" />
-                    </div>
-                    <span className="text-foreground">Signal accelerating (+18 points in 12mo)</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Leadership Signals - Card Grid Layout */}
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <div className="mb-6">
-                <h3 className="font-bold text-foreground text-lg">Leadership Signals</h3>
-                <p className="text-sm text-muted-foreground">Signals {leader.name.split(' ')[0]} is demonstrating</p>
-              </div>
-
-              {/* Signal Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {signalCategories.flatMap((category) => 
-                  category.behaviors.filter(b => b.strength >= 60).map((behavior) => {
-                    const behaviorData = behaviorRecognitions[behavior.name];
-                    const strengthLevel = getSignalLevel(behavior.strength);
-                    const strengthColor = strengthLevel === "Strong" ? "bg-emerald-500" : strengthLevel === "Medium" ? "bg-sky-500" : "bg-slate-400";
-                    
-                    return (
-                      <div 
-                        key={behavior.name}
-                        onClick={() => {
-                          setSelectedBehavior(behavior);
-                          setSelectedCategory(category);
-                        }}
-                        className={cn(
-                          "relative overflow-hidden rounded-xl border border-border bg-white dark:bg-card hover:shadow-lg cursor-pointer transition-all duration-300 group",
-                          selectedBehavior?.name === behavior.name && "ring-2 ring-primary border-primary"
-                        )}
-                      >
-                        {/* Category accent bar at top */}
-                        <div className={cn("h-1", category.progressColor)} />
-                        
-                        <div className="p-5">
-                          {/* Header with category pill */}
-                          <div className="flex items-start justify-between gap-3 mb-3">
-                            <div className={cn(
-                              "p-2 rounded-lg",
-                              category.bgColor
-                            )}>
-                              <div className={category.color}>
-                                {category.icon}
+              {/* Leadership Signals */}
+              <div className="bg-card rounded-2xl border border-border p-6">
+                <div className="mb-6">
+                  <h3 className="font-bold text-foreground text-lg">Leadership Signals</h3>
+                  <p className="text-sm text-muted-foreground">Signals {firstName} is demonstrating</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {signalCategories.flatMap((category) =>
+                    category.behaviors.filter(b => b.strength >= 60).map((behavior) => {
+                      const bd = behaviorRecognitions[behavior.name];
+                      return (
+                        <div 
+                          key={behavior.name}
+                          onClick={() => {
+                            setSelectedBehavior(behavior);
+                            setSelectedCategory(category);
+                          }}
+                          className={cn(
+                            "relative overflow-hidden rounded-xl border border-border bg-white dark:bg-card hover:shadow-lg cursor-pointer transition-all duration-300 group",
+                            selectedBehavior?.name === behavior.name && "ring-2 ring-primary border-primary"
+                          )}
+                        >
+                          <div className={cn("h-1", category.progressColor)} />
+                          <div className="p-5">
+                            <div className="flex items-start justify-between gap-3 mb-3">
+                              <div className={cn("p-2 rounded-lg", category.bgColor)}>
+                                <div className={category.color}>{category.icon}</div>
                               </div>
+                              <span className={cn(
+                                "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap",
+                                category.bgColor, category.color
+                              )}>
+                                {category.category}
+                              </span>
                             </div>
-                            <span className={cn(
-                              "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap",
-                              category.bgColor,
-                              category.color
-                            )}>
-                              {category.category}
-                            </span>
+                            <h4 className="font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                              {behavior.name}
+                            </h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                              {bd?.summary || behavior.description}
+                            </p>
                           </div>
-                          
-                          {/* Signal Name */}
-                          <h4 className="font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                            {behavior.name}
-                          </h4>
-                          
-                          {/* Description */}
-                          <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">
-                            {behaviorData?.summary || behavior.description}
-                          </p>
-                          
                         </div>
-                      </div>
-                    );
-                  })
-                )}
+                      );
+                    })
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Behavior Detail Modal */}
-            <Dialog
-              open={!!selectedBehavior}
-              onOpenChange={(open) => {
-                if (!open) setSelectedBehavior(null);
-              }}
-            >
-              <DialogContent className="max-w-3xl p-0 overflow-hidden">
-                {selectedBehavior && behaviorData && (
-                  <div className="grid grid-cols-1 md:grid-cols-5">
-                    {/* Left: header */}
-                    <div
-                      className={cn(
+              {/* Behavior Detail Modal */}
+              <Dialog open={!!selectedBehavior} onOpenChange={(open) => { if (!open) setSelectedBehavior(null); }}>
+                <DialogContent className="max-w-3xl p-0 overflow-hidden">
+                  {selectedBehavior && behaviorDataForModal && (
+                    <div className="grid grid-cols-1 md:grid-cols-5">
+                      <div className={cn(
                         "md:col-span-2 p-6 text-foreground border-b md:border-b-0 md:border-r border-border",
-                        selectedBehavior.strength >= 75
-                          ? "bg-success/10"
-                          : selectedBehavior.strength >= 50
-                            ? "bg-primary/10"
-                            : "bg-muted/60"
-                      )}
-                    >
-                      <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">
-                          {selectedBehavior.name}
-                        </DialogTitle>
-                      </DialogHeader>
-
-                      <div className="mt-3">
-                        <span className={cn(
-                          "text-sm font-semibold px-3 py-1 rounded-full",
-                          selectedBehavior.strength >= 75 ? "bg-emerald-100 text-emerald-700" :
-                          selectedBehavior.strength >= 50 ? "bg-sky-100 text-sky-700" :
-                          "bg-slate-100 text-slate-700"
-                        )}>
-                          {getSignalLevel(selectedBehavior.strength)} Signal
-                        </span>
-                      </div>
-
-                      {/* Visual strength indicator */}
-                      <div className="mt-4 flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((dot) => {
-                          const filled = selectedBehavior.strength >= dot * 20;
-                          const barColor = selectedBehavior.strength >= 75 ? "bg-emerald-500" 
-                            : selectedBehavior.strength >= 50 ? "bg-sky-500" 
-                            : "bg-slate-400";
-                          return (
-                            <div 
-                              key={dot}
-                              className={cn(
-                                "h-2 flex-1 rounded-sm transition-all",
-                                filled ? barColor : "bg-muted"
-                              )}
-                            />
-                          );
-                        })}
-                      </div>
-
-                      <div className="mt-5">
-                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">
-                          How {leader.name.split(' ')[0]} Demonstrates This
-                        </p>
-                        <p className="text-sm leading-relaxed">
-                          {behaviorData.summary}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Right: evidence */}
-                    <div className="md:col-span-3 p-6 bg-card">
-                      <div className="flex items-center gap-2 mb-4">
-                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">
-                          Recognition Evidence
-                        </p>
-                      </div>
-
-                      {behaviorData.recognitions.length > 0 ? (
-                        <div className="space-y-3 max-h-[60vh] overflow-auto pr-2">
-                          {behaviorData.recognitions.map((rec, idx) => (
-                            <div key={idx} className="rounded-xl border border-border bg-background p-4">
-                              <div className="flex items-center justify-between gap-3 mb-2">
-                                <p className="text-xs font-semibold text-foreground truncate">
-                                  {rec.from} • {rec.role}
-                                </p>
-                                <span className="text-xs text-muted-foreground whitespace-nowrap">
-                                  {rec.date}
-                                </span>
-                              </div>
-                              <p className="text-sm text-foreground leading-relaxed italic">"{rec.quote}"</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="rounded-xl border border-border bg-muted/40 p-4">
-                          <p className="text-sm text-muted-foreground">
-                            No recognition data available yet for this signal.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
-
-        {activeTab === "timeline" && (
-          <div className="flex gap-8">
-            {/* Timeline */}
-            <div className="flex-1 max-w-xl">
-              <div className="relative">
-                {/* Vertical line - positioned to align with icon centers */}
-                <div className="absolute left-[94px] top-8 bottom-8 w-0.5 bg-gradient-to-b from-slate-300 via-slate-200 to-sky-300 dark:from-slate-600 dark:via-slate-700 dark:to-sky-600" />
-
-                {/* Events */}
-                <div className="space-y-8">
-                  {enhancedTimeline.map((event, index) => {
-                    const Icon = typeIcons[event.type];
-                    const isSelected = selectedEvent?.id === event.id;
-                    const isLast = index === enhancedTimeline.length - 1;
-                    const isSecondLast = index === enhancedTimeline.length - 2;
-                    
-                    return (
-                      <div
-                        key={event.id}
-                        className={cn(
-                          "flex items-start gap-4 cursor-pointer group transition-all",
-                          isSelected ? "opacity-100" : "opacity-70 hover:opacity-100"
-                        )}
-                        onClick={() => setSelectedEvent(event)}
-                      >
-                        {/* Date */}
-                        <div className="w-16 text-right flex-shrink-0 pt-3">
-                          <span className="text-xs font-semibold text-muted-foreground uppercase">
-                            {event.date}
+                        selectedBehavior.strength >= 75 ? "bg-emerald-500/10" : selectedBehavior.strength >= 50 ? "bg-primary/10" : "bg-muted/60"
+                      )}>
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-bold">{selectedBehavior.name}</DialogTitle>
+                        </DialogHeader>
+                        <div className="mt-3">
+                          <span className={cn(
+                            "text-sm font-semibold px-3 py-1 rounded-full",
+                            selectedBehavior.strength >= 75 ? "bg-emerald-100 text-emerald-700" :
+                            selectedBehavior.strength >= 50 ? "bg-sky-100 text-sky-700" : "bg-slate-100 text-slate-700"
+                          )}>
+                            {getSignalLevel(selectedBehavior.strength)} Signal
                           </span>
                         </div>
-
-                        {/* Icon Circle - centered on line */}
-                        <div className="relative flex-shrink-0">
-                          <div
-                            className={cn(
-                              "relative z-10 h-12 w-12 rounded-full flex items-center justify-center transition-all shadow-sm",
-                              typeColors[event.type],
-                              isSelected && "scale-110 shadow-lg"
-                            )}
-                          >
-                            <Icon className="h-5 w-5" />
-                          </div>
+                        <div className="mt-4 flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((dot) => {
+                            const filled = selectedBehavior.strength >= dot * 20;
+                            const barColor = selectedBehavior.strength >= 75 ? "bg-emerald-500" : selectedBehavior.strength >= 50 ? "bg-sky-500" : "bg-slate-400";
+                            return <div key={dot} className={cn("h-2 flex-1 rounded-sm", filled ? barColor : "bg-muted")} />;
+                          })}
                         </div>
+                        <div className="mt-5">
+                          <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">
+                            How {firstName} Demonstrates This
+                          </p>
+                          <p className="text-sm leading-relaxed">{behaviorDataForModal.summary}</p>
+                        </div>
+                      </div>
+                      <div className="md:col-span-3 p-6 bg-card">
+                        <div className="flex items-center gap-2 mb-4">
+                          <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                          <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">Recognition Evidence</p>
+                        </div>
+                        {behaviorDataForModal.recognitions.length > 0 ? (
+                          <div className="space-y-3 max-h-[60vh] overflow-auto pr-2">
+                            {behaviorDataForModal.recognitions.map((rec, idx) => (
+                              <div key={idx} className="rounded-xl border border-border bg-background p-4">
+                                <div className="flex items-center justify-between gap-3 mb-2">
+                                  <p className="text-xs font-semibold text-foreground truncate">{rec.from} • {rec.role}</p>
+                                  <span className="text-xs text-muted-foreground whitespace-nowrap">{rec.date}</span>
+                                </div>
+                                <p className="text-sm text-foreground leading-relaxed italic">"{rec.quote}"</p>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="rounded-xl border border-border bg-muted/40 p-4">
+                            <p className="text-sm text-muted-foreground">No recognition data available yet.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </DialogContent>
+              </Dialog>
+            </div>
+          )}
 
-                        {/* Content Card */}
+          {activeTab === "timeline" && (
+            <div className="flex gap-8">
+              <div className="flex-1 max-w-xl">
+                <div className="relative">
+                  <div className="absolute left-[94px] top-8 bottom-8 w-0.5 bg-gradient-to-b from-slate-300 via-slate-200 to-sky-300 dark:from-slate-600 dark:via-slate-700 dark:to-sky-600" />
+                  <div className="space-y-8">
+                    {enhancedTimeline.map((event, index) => {
+                      const Icon = typeIcons[event.type];
+                      const isSelected = selectedEvent?.id === event.id;
+                      const isLast = index === enhancedTimeline.length - 1;
+                      const isSecondLast = index === enhancedTimeline.length - 2;
+                      return (
                         <div
-                          className={cn(
+                          key={event.id}
+                          className={cn("flex items-start gap-4 cursor-pointer group transition-all", isSelected ? "opacity-100" : "opacity-70 hover:opacity-100")}
+                          onClick={() => setSelectedEvent(event)}
+                        >
+                          <div className="w-16 text-right flex-shrink-0 pt-3">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase">{event.date}</span>
+                          </div>
+                          <div className="relative flex-shrink-0">
+                            <div className={cn("relative z-10 h-12 w-12 rounded-full flex items-center justify-center transition-all shadow-sm", typeColors[event.type], isSelected && "scale-110 shadow-lg")}>
+                              <Icon className="h-5 w-5" />
+                            </div>
+                          </div>
+                          <div className={cn(
                             "flex-1 bg-card rounded-xl border p-4 transition-all",
                             isSelected ? "border-primary shadow-lg" : "border-border shadow-sm",
                             (isLast || isSecondLast) && "border-l-4",
                             isSecondLast && "border-l-amber-400",
                             isLast && "border-l-sky-400"
-                          )}
-                        >
-                          {event.badge && (
-                            <Badge
-                              variant="outline"
-                              className={cn("mb-2 text-xs", badgeColors[event.badge] || "bg-muted")}
-                            >
-                              {event.badge}
-                            </Badge>
-                          )}
-                          <h4 className="font-semibold text-foreground">{event.title}</h4>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {event.description}
+                          )}>
+                            {event.badge && (
+                              <Badge variant="outline" className={cn("mb-2 text-xs", badgeColors[event.badge] || "bg-muted")}>
+                                {event.badge}
+                              </Badge>
+                            )}
+                            <h4 className="font-semibold text-foreground">{event.title}</h4>
+                            <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Detail Panel */}
+              {selectedEvent && (
+                <div className="w-96 sticky top-8 h-fit">
+                  <div className={cn(
+                    "rounded-t-2xl p-6 text-white",
+                    selectedEvent.type === "gap" ? "bg-gradient-to-r from-amber-500 to-orange-500" :
+                    selectedEvent.type === "target" ? "bg-gradient-to-r from-sky-500 to-blue-500" :
+                    "bg-gradient-to-r from-accent-magenta to-primary"
+                  )}>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm opacity-80 uppercase tracking-wide">{selectedEvent.date}</p>
+                        <h3 className="text-xl font-bold mt-1">{selectedEvent.title}</h3>
+                      </div>
+                      {selectedEvent.type === "gap" ? <AlertTriangle className="h-6 w-6 opacity-80" /> :
+                       selectedEvent.type === "target" ? <Star className="h-6 w-6 opacity-80" /> :
+                       <Zap className="h-6 w-6 opacity-80" />}
+                    </div>
+                  </div>
+                  <div className="bg-card rounded-b-2xl border border-t-0 border-border p-6 space-y-6">
+                    {selectedEvent.gaps && selectedEvent.gaps.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">Competency Gaps to Address</p>
+                        <div className="space-y-2">
+                          {selectedEvent.gaps.map((gap) => (
+                            <div key={gap} className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
+                              <AlertTriangle className="h-4 w-4 text-amber-600" />
+                              <span className="text-sm text-foreground">{gap}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {selectedEvent.type === "target" && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">Target Role Details</p>
+                        <div className="bg-sky-50 dark:bg-sky-950/30 rounded-lg p-4 border border-sky-200 dark:border-sky-800">
+                          <p className="text-foreground">
+                            Based on current trajectory, {firstName} is projected to reach {leader.predictedRole} level by {selectedEvent.date}.
                           </p>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Detail Panel */}
-            {selectedEvent && (
-              <div className="w-96 sticky top-8 h-fit">
-                <div className={cn(
-                  "rounded-t-2xl p-6 text-white",
-                  selectedEvent.type === "gap" ? "bg-gradient-to-r from-amber-500 to-orange-500" :
-                  selectedEvent.type === "target" ? "bg-gradient-to-r from-sky-500 to-blue-500" :
-                  "bg-gradient-to-r from-accent-magenta to-primary"
-                )}>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm opacity-80 uppercase tracking-wide">
-                        {selectedEvent.date}
-                      </p>
-                      <h3 className="text-xl font-bold mt-1">{selectedEvent.title}</h3>
-                    </div>
-                    {selectedEvent.type === "gap" ? (
-                      <AlertTriangle className="h-6 w-6 opacity-80" />
-                    ) : selectedEvent.type === "target" ? (
-                      <Star className="h-6 w-6 opacity-80" />
-                    ) : (
-                      <Zap className="h-6 w-6 opacity-80" />
+                    )}
+                    {selectedEvent.evidence && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">Behavioral Evidence</p>
+                        <p className="text-foreground">{selectedEvent.evidence}</p>
+                      </div>
+                    )}
+                    {selectedEvent.recognition && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">Supporting Recognition</p>
+                        <div className="bg-amber-500/10 rounded-lg p-4 border-l-4 border-amber-500">
+                          <p className="text-xs font-semibold text-foreground mb-2">FROM {selectedEvent.recognition.from.toUpperCase()}</p>
+                          <p className="text-foreground italic">"{selectedEvent.recognition.quote}"</p>
+                        </div>
+                      </div>
+                    )}
+                    {selectedEvent.skills && selectedEvent.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedEvent.skills.map((skill) => <Badge key={skill} variant="outline">{skill}</Badge>)}
+                      </div>
                     )}
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
-                <div className="bg-card rounded-b-2xl border border-t-0 border-border p-6 space-y-6">
-                  {selectedEvent.gaps && selectedEvent.gaps.length > 0 && (
-                    <div>
-                      <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">
-                        Competency Gaps to Address
-                      </p>
-                      <div className="space-y-2">
-                        {selectedEvent.gaps.map((gap) => (
-                          <div key={gap} className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
-                            <AlertTriangle className="h-4 w-4 text-amber-600" />
-                            <span className="text-sm text-foreground">{gap}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvent.type === "target" && (
-                    <div>
-                      <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">
-                        Target Role Details
-                      </p>
-                      <div className="bg-sky-50 dark:bg-sky-950/30 rounded-lg p-4 border border-sky-200 dark:border-sky-800">
-                        <p className="text-foreground">
-                          Based on current trajectory and successful completion of gap areas, 
-                          {leader.name.split(' ')[0]} is projected to reach {leader.predictedRole} 
-                          level by {selectedEvent.date}.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvent.evidence && (
-                    <div>
-                      <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">
-                        Behavioral Evidence
-                      </p>
-                      <p className="text-foreground">{selectedEvent.evidence}</p>
-                    </div>
-                  )}
-
-                  {selectedEvent.recognition && (
-                    <div>
-                      <p className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-2">
-                        Supporting Recognition
-                      </p>
-                      <div className="bg-warning/10 rounded-lg p-4 border-l-4 border-warning">
-                        <p className="text-xs font-semibold text-warning-foreground mb-2">
-                          FROM {selectedEvent.recognition.from.toUpperCase()}
-                        </p>
-                        <p className="text-foreground italic">
-                          "{selectedEvent.recognition.quote}"
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvent.skills && selectedEvent.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedEvent.skills.map((skill) => (
-                        <Badge key={skill} variant="outline">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+      {/* Right: AI sidebar */}
+      <div className="w-[410px] flex-shrink-0">
+        <SignalAISidebar
+          categoryName={leader.name}
+          categoryColor="#a855f7"
+          aiSummary={`${leader.name} is a high-potential ${leader.currentLevel || "Director"} demonstrating strong readiness for the ${leader.predictedRole} role. Their signal profile shows ${strongCount} strong behaviors across ${signalCategories.length} categories, with consistent upward trajectory over ${leader.tenure}.`}
+          suggestedPrompts={[
+            `What are ${firstName}'s strongest leadership signals?`,
+            `What gaps should ${firstName} address for ${leader.predictedRole}?`,
+            `How does ${firstName} compare to other Accelerate-tier leaders?`,
+            `What development plan would you recommend for ${firstName}?`,
+          ]}
+        />
       </div>
     </div>
   );
