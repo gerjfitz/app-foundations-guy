@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronRight, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signalCategories } from "./GenomeVisual";
 import StrengthRing from "./StrengthRing";
@@ -11,9 +12,9 @@ const getPredictiveLevel = (pct: number) => {
 };
 
 const SignalExplorer = () => {
-  // All categories expanded by default
+  // Only first category expanded by default
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(signalCategories.map(c => c.id))
+    new Set(signalCategories.length > 0 ? [signalCategories[0].id] : [])
   );
   const [lines, setLines] = useState<{ path: string; color: string; key: string }[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -119,11 +120,23 @@ const SignalExplorer = () => {
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
-                    className="flex flex-col items-center px-4 py-5 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40"
+                    className="flex flex-col items-center px-4 py-5 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40 relative"
                     style={{
                       background: `linear-gradient(135deg, ${category.color}20 0%, ${category.color}08 40%, white 75%)`,
                     }}
                   >
+                    {/* Expand arrow */}
+                    <div className="absolute top-3 right-3">
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 0 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ChevronRight 
+                          className={cn("h-4 w-4 text-muted-foreground transition-transform duration-200", isExpanded && "rotate-90")} 
+                        />
+                      </motion.div>
+                    </div>
+
                     {/* Strength Ring */}
                     <div className="mb-2">
                       <StrengthRing
@@ -157,10 +170,11 @@ const SignalExplorer = () => {
                   </div>
                 </div>
 
-                {/* Right: sub-signals with strength ring */}
-                <AnimatePresence>
-                  {isExpanded && (
+                {/* Right: sub-signals or collapsed summary */}
+                <AnimatePresence mode="wait">
+                  {isExpanded ? (
                     <motion.div
+                      key="expanded"
                       initial={{ opacity: 0, x: 16 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 16 }}
@@ -208,6 +222,39 @@ const SignalExplorer = () => {
                           </div>
                         );
                       })}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="collapsed"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex-1 min-w-0 py-1"
+                    >
+                      <div 
+                        className="rounded-xl border border-dashed border-border/40 px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-border/60 transition-colors"
+                        onClick={() => toggleCategory(category.id)}
+                        style={{
+                          background: `linear-gradient(135deg, ${category.color}04 0%, transparent 100%)`,
+                        }}
+                      >
+                        <div 
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: `${category.color}10` }}
+                        >
+                          <Activity className="w-4 h-4" style={{ color: category.color }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-muted-foreground">
+                            <span className="font-medium text-foreground">{category.subSignals.length} signals</span>
+                            {' · '}
+                            {category.subSignals.slice(0, 3).map(s => s.name).join(', ')}
+                            {category.subSignals.length > 3 && ` +${category.subSignals.length - 3} more`}
+                          </p>
+                        </div>
+                        <span className="text-xs text-muted-foreground/60">Click to expand</span>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

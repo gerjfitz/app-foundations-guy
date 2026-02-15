@@ -116,7 +116,7 @@ const LeakagePage = () => {
                 </div>
               </div>
               <div className="py-2">
-                <h1 className="text-4xl lg:text-5xl font-extrabold text-foreground leading-tight mb-3">Walk-Aways</h1>
+                <h1 className="text-4xl lg:text-5xl font-extrabold text-foreground leading-tight mb-3">Leadership Leakage</h1>
                 <p className="text-lg text-muted-foreground max-w-xl mx-auto">
                   See where your predicted Future Leaders are exiting before ascending to senior roles.
                 </p>
@@ -300,7 +300,7 @@ const LeakagePage = () => {
       {/* Right: AI Assistant — full height, matching signal page */}
       <div className="w-[410px] flex-shrink-0">
         <SignalAISidebar
-          categoryName="Walk-Aways"
+          categoryName="Leadership Leakage"
           categoryColor={leakageColor}
           aiSummary="Engineering has the highest attrition with 14 exits. Primary drivers include limited promotion pathways and competitive external offers. Consider accelerating development programs."
           recognitionSummary="Engineering has the highest attrition with 14 exits. Consider accelerating development programs and creating more visible career pathways."

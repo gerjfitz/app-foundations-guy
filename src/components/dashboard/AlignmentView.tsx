@@ -234,6 +234,10 @@ const AlignmentCard = ({
 
         {/* Right side — genome mappings */}
         <div className="flex-1 space-y-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1.5 mb-1">
+            <Dna className="w-3 h-3" />
+            Genome Signals
+          </p>
           {item.mappings.map((mapping, mi) => {
             const catColor =
               genomeCategoryColors[mapping.category] || "#94a3b8";
@@ -497,24 +501,6 @@ const AlignmentView = () => {
         </div>
       </div>
 
-      {/* Section 2: Genome-Only Dimensions */}
-      <div>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center">
-            <Dna className="w-5 h-5 text-purple-500" />
-          </div>
-          <h2 className="text-2xl font-bold text-foreground">Genome-Only Dimensions</h2>
-        </div>
-        <p className="text-[11px] uppercase tracking-widest text-muted-foreground mb-6 ml-12 max-w-2xl">
-          C-LEAD defines what great leadership looks like today — the Genome adds a temporal dimension, surfacing patterns that point-in-time assessments can't detect
-        </p>
-
-        <div className="grid grid-cols-1 gap-4">
-          {genomeDimensions.map((dim, i) => (
-            <GenomeDimensionCard key={dim.dimension} dim={dim} index={i} />
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
