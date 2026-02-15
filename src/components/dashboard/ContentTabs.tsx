@@ -21,7 +21,7 @@ const tabs: Tab[] = [
   },
   { id: "genome", label: "Genome" },
   { id: "talent-magnet", label: "Talent Magnets" },
-  { id: "leakage", label: "Walk-Aways" },
+  { id: "leakage", label: "Leakage" },
   { id: "coverage", label: "Coverage" },
 ];
 
