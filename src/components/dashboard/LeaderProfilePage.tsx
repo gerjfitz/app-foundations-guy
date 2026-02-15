@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, Zap, Check, RefreshCw, AlertTriangle, Star, Sparkles, TrendingUp, TrendingDown, Minus, MessageSquare, Crown, Compass, Megaphone, Rocket, Users } from "lucide-react";
+import { signalCategories as genomeCategories } from "./GenomeVisual";
+import StrengthRing from "./StrengthRing";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -369,7 +371,7 @@ const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white border-b border-border sticky top-[52px] z-10">
+        <div className="bg-white sticky top-[52px] z-10">
           <div className="max-w-[1020px] mx-auto px-8 flex gap-8">
             <button
               onClick={() => setActiveTab("overview")}
@@ -445,52 +447,102 @@ const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
                 </div>
               </div>
 
-              {/* Leadership Signals */}
-              <div className="bg-card rounded-2xl border border-border p-6">
+              {/* Genome Signals */}
+              <div>
                 <div className="mb-6">
-                  <h3 className="font-bold text-foreground text-lg">Leadership Signals</h3>
-                  <p className="text-sm text-muted-foreground">Signals {firstName} is demonstrating</p>
+                  <h3 className="font-bold text-foreground text-lg">Genome Signals</h3>
+                  <p className="text-sm text-muted-foreground">The genome makeup for {firstName}</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {signalCategories.flatMap((category) =>
-                    category.behaviors.filter(b => b.strength >= 60).map((behavior) => {
-                      const bd = behaviorRecognitions[behavior.name];
-                      return (
-                        <div 
-                          key={behavior.name}
-                          onClick={() => {
-                            setSelectedBehavior(behavior);
-                            setSelectedCategory(category);
-                          }}
-                          className={cn(
-                            "relative overflow-hidden rounded-xl border border-border bg-white dark:bg-card hover:shadow-lg cursor-pointer transition-all duration-300 group",
-                            selectedBehavior?.name === behavior.name && "ring-2 ring-primary border-primary"
-                          )}
-                        >
-                          <div className={cn("h-1", category.progressColor)} />
-                          <div className="p-5">
-                            <div className="flex items-start justify-between gap-3 mb-3">
-                              <div className={cn("p-2 rounded-lg", category.bgColor)}>
-                                <div className={category.color}>{category.icon}</div>
+                <div className="space-y-6">
+                  {(() => {
+                    // Simulate which genome signals this leader has (subset)
+                    const leaderGenomeMap: Record<string, number[]> = {
+                      "executive": [0, 1, 5],
+                      "strategic": [0, 1],
+                      "voice": [0, 1],
+                      "transformation": [0, 2],
+                      "people": [0, 1, 3],
+                    };
+                    
+                    return genomeCategories
+                      .filter(cat => leaderGenomeMap[cat.id])
+                      .map((category) => {
+                        const activeIndices = leaderGenomeMap[category.id] || [];
+                        const activeSubSignals = activeIndices
+                          .map(idx => category.subSignals[idx])
+                          .filter(Boolean);
+                        
+                        if (activeSubSignals.length === 0) return null;
+                        
+                        const getPredictiveLevel = (pct: number) => {
+                          if (pct >= 70) return { label: "High", color: "#22c55e", bgColor: "rgba(34,197,94,0.08)" };
+                          if (pct >= 40) return { label: "Medium", color: "#f59e0b", bgColor: "rgba(245,158,11,0.08)" };
+                          return { label: "Low", color: "#64748b", bgColor: "rgba(100,116,139,0.08)" };
+                        };
+
+                        return (
+                          <div key={category.id}>
+                            {/* Category header */}
+                            <div
+                              className="flex items-center gap-4 px-5 py-4 rounded-xl border border-border/40 mb-3"
+                              style={{
+                                background: `linear-gradient(135deg, ${category.color}15 0%, ${category.color}05 40%, white 75%)`,
+                              }}
+                            >
+                              <StrengthRing
+                                value={category.strength}
+                                color={category.color}
+                                size={52}
+                                strokeWidth={4}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-sm text-foreground">{category.name}</h4>
+                                <p className="text-xs text-muted-foreground mt-0.5">{category.description}</p>
                               </div>
-                              <span className={cn(
-                                "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap",
-                                category.bgColor, category.color
-                              )}>
-                                {category.category}
-                              </span>
+                              <span className="text-xs font-medium text-muted-foreground">{activeSubSignals.length} signal{activeSubSignals.length !== 1 ? 's' : ''}</span>
                             </div>
-                            <h4 className="font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                              {behavior.name}
-                            </h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                              {bd?.summary || behavior.description}
-                            </p>
+                            
+                            {/* Sub-signals always visible */}
+                            <div className="space-y-2 pl-4">
+                              {activeSubSignals.map((subSignal, idx) => {
+                                const level = getPredictiveLevel(subSignal.predictiveStrength);
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="relative flex items-center gap-4 px-5 py-3.5 rounded-xl bg-white border border-border/50 shadow-sm overflow-hidden"
+                                  >
+                                    <div
+                                      className="absolute inset-0 pointer-events-none"
+                                      style={{
+                                        background: `linear-gradient(270deg, ${category.color}0c 0%, transparent 60%)`,
+                                      }}
+                                    />
+                                    <div className="flex-shrink-0">
+                                      <StrengthRing
+                                        value={subSignal.predictiveStrength}
+                                        color={category.color}
+                                        size={44}
+                                        strokeWidth={3.5}
+                                      />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <h5 className="font-medium text-sm text-foreground truncate">{subSignal.name}</h5>
+                                      <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
+                                    </div>
+                                    <span
+                                      className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
+                                      style={{ backgroundColor: level.bgColor, color: level.color }}
+                                    >
+                                      {level.label}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  )}
+                        );
+                      });
+                  })()}
                 </div>
               </div>
 
