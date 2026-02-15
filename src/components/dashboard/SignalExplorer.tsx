@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Activity, GitCompareArrows } from "lucide-react";
+import { ChevronDown, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signalCategories } from "./GenomeVisual";
 import StrengthRing from "./StrengthRing";
@@ -22,47 +22,44 @@ const cleadBehaviors = [
 
 // Maps: genomeCategory-subSignalIndex → C-LEAD behavior ids
 const cleadMapping: Record<string, string[]> = {
-  // Executive Access → Collaborate (org leadership), Accelerate
   "executive-0": ["collaborate"],
   "executive-1": ["accelerate"],
-  "executive-2": ["collaborate"],
+  "executive-2": [],
   "executive-3": ["execute"],
-  "executive-4": ["accelerate"],
+  "executive-4": [],
   "executive-5": ["collaborate"],
-  // Strategic Positioning → Execute, Disrupt
   "strategic-0": ["execute", "disrupt"],
-  "strategic-1": ["execute"],
+  "strategic-1": [],
   "strategic-2": ["accelerate"],
   "strategic-3": ["disrupt"],
-  "strategic-4": ["disrupt"],
-  // Voice & Influence → Collaborate, Disrupt
+  "strategic-4": [],
   "voice-0": ["disrupt"],
-  "voice-1": ["collaborate"],
+  "voice-1": [],
   "voice-2": ["collaborate"],
   "voice-3": ["accelerate"],
-  "voice-4": ["collaborate"],
-  // Transformation & Impact → Execute, Accelerate
+  "voice-4": [],
   "transformation-0": ["execute", "accelerate"],
-  "transformation-1": ["accelerate"],
+  "transformation-1": [],
   "transformation-2": ["execute"],
   "transformation-3": ["learn"],
-  "transformation-4": ["execute"],
-  // People Leadership → Learn, Collaborate
+  "transformation-4": [],
   "people-0": ["learn"],
   "people-1": ["learn", "collaborate"],
-  "people-2": ["collaborate"],
+  "people-2": [],
   "people-3": ["learn"],
-  "people-4": ["collaborate"],
-  // Anti-Patterns → (limited mappings)
+  "people-4": [],
   "anti-patterns-0": [],
   "anti-patterns-6": [],
 };
 
-const SignalExplorer = () => {
+interface SignalExplorerProps {
+  showCleadMapping?: boolean;
+}
+
+const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(signalCategories.length > 0 ? [signalCategories[0].id] : [])
   );
-  const [showCleadMapping, setShowCleadMapping] = useState(false);
   const [lines, setLines] = useState<{ path: string; color: string; key: string }[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -143,30 +140,6 @@ const SignalExplorer = () => {
 
   return (
     <div className="relative" ref={containerRef}>
-      {/* Toggle for C-LEAD mapping */}
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={() => setShowCleadMapping(prev => !prev)}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all",
-            showCleadMapping 
-              ? "bg-primary/10 border-primary/30 text-primary" 
-              : "bg-muted/30 border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
-          )}
-        >
-          <GitCompareArrows className="w-4 h-4" />
-          Cisco Leadership Mapping
-          <div className={cn(
-            "w-8 h-[18px] rounded-full relative transition-colors duration-200",
-            showCleadMapping ? "bg-primary" : "bg-border"
-          )}>
-            <div className={cn(
-              "absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform duration-200",
-              showCleadMapping ? "translate-x-[16px]" : "translate-x-[2px]"
-            )} />
-          </div>
-        </button>
-      </div>
       {/* SVG ribbon connections */}
       <svg 
         className="absolute inset-0 w-full h-full pointer-events-none z-10" 
@@ -315,12 +288,12 @@ const SignalExplorer = () => {
                                         animate={{ opacity: 1, height: "auto" }}
                                         exit={{ opacity: 0, height: 0 }}
                                         transition={{ duration: 0.2 }}
-                                        className="flex items-center gap-1.5 mt-1.5"
+                                        className="flex items-center gap-1.5 mt-3"
                                       >
                                         {matchedBehaviors.map(behavior => (
                                           <span
                                             key={behavior!.id}
-                                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+                                            className="text-[11px] font-semibold px-3 py-1.5 rounded-full border"
                                             style={{
                                               color: behavior!.color,
                                               backgroundColor: `${behavior!.color}10`,
