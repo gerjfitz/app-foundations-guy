@@ -213,116 +213,173 @@ const categoryStyles = {
 const TalentMagnetModal = ({ magnet, open, onClose }: { magnet: TalentMagnet; open: boolean; onClose: () => void }) => {
   const style = categoryStyles[magnet.category];
   const totalPipeline = magnet.accelerate + magnet.nurture + magnet.monitor;
+  const totalInfluence = totalPipeline + magnet.departed.length + magnet.alumni.length;
+
+  const lanes = [
+    {
+      title: "Current Pipeline",
+      count: totalPipeline,
+      subtitle: "Active future leaders",
+      icon: UserCheck,
+      accentBg: "bg-emerald-500/10",
+      accentText: "text-emerald-600",
+      accentBorder: "border-emerald-500/20",
+      dotColor: "bg-emerald-500",
+    },
+    {
+      title: "Departed",
+      count: magnet.departed.length,
+      subtitle: "Left the organization",
+      icon: UserMinus,
+      accentBg: "bg-rose-500/10",
+      accentText: "text-rose-600",
+      accentBorder: "border-rose-500/20",
+      dotColor: "bg-rose-500",
+    },
+    {
+      title: "Alumni Network",
+      count: magnet.alumni.length,
+      subtitle: "Former direct reports",
+      icon: RotateCcw,
+      accentBg: "bg-blue-500/10",
+      accentText: "text-blue-600",
+      accentBorder: "border-blue-500/20",
+      dotColor: "bg-blue-500",
+    },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[860px] max-h-[85vh] overflow-y-auto p-0">
+      <DialogContent className="max-w-[920px] max-h-[88vh] overflow-hidden p-0 gap-0 rounded-2xl">
         {/* Header */}
-        <div className="p-6 pb-4 border-b border-border">
+        <div className="px-8 pt-7 pb-6 bg-gradient-to-b from-muted/40 to-background">
           <DialogHeader>
-            <div className="flex items-center gap-4">
-              <img src={magnet.image} alt={magnet.name} className="w-14 h-14 rounded-xl object-cover border border-border" />
-              <div className="flex-1">
-                <DialogTitle className="text-xl">{magnet.name}</DialogTitle>
-                <DialogDescription className="text-sm mt-1">{magnet.role}</DialogDescription>
+            <div className="flex items-start gap-5">
+              <img
+                src={magnet.image}
+                alt={magnet.name}
+                className="w-16 h-16 rounded-2xl object-cover border-2 border-background shadow-md"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-1">
+                  <DialogTitle className="text-2xl font-bold">{magnet.name}</DialogTitle>
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border"
+                    style={{ color: style.color, backgroundColor: `${style.color}10`, borderColor: `${style.color}30` }}
+                  >
+                    <style.icon className="w-3.5 h-3.5" />
+                    {style.label}
+                  </span>
+                </div>
+                <DialogDescription className="text-sm">{magnet.role}</DialogDescription>
               </div>
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold border"
-                style={{ color: style.color, backgroundColor: `${style.color}10`, borderColor: `${style.color}30` }}
-              >
-                <style.icon className="w-3.5 h-3.5" />
-                {style.label}
-              </span>
+              <div className="text-right flex-shrink-0">
+                <p className="text-3xl font-bold text-foreground">{magnet.magnetScore}</p>
+                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Magnet Score</p>
+              </div>
             </div>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{magnet.insight}</p>
+
+          {/* Insight */}
+          <div className="mt-5 p-4 rounded-xl bg-card border border-border">
+            <p className="text-sm text-foreground/80 leading-relaxed">{magnet.insight}</p>
+          </div>
+
+          {/* Summary stats row */}
+          <div className="flex items-center gap-6 mt-5">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{totalPipeline}</span> in pipeline</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-rose-500" />
+              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{magnet.departed.length}</span> departed</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">{magnet.alumni.length}</span> alumni</span>
+            </div>
+            <div className="ml-auto text-xs text-muted-foreground">
+              <span className="font-semibold text-foreground">{totalInfluence}</span> total talent influenced
+            </div>
+          </div>
         </div>
 
         {/* Three lanes */}
-        <div className="p-6 grid grid-cols-3 gap-4">
-          {/* Current Pipeline */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
-                <UserCheck className="w-4 h-4 text-emerald-600" />
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground">Current Pipeline</h4>
-                <p className="text-[10px] text-muted-foreground">{totalPipeline} in future leaders pool</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              {magnet.directReports.length > 0 ? magnet.directReports.map((dr) => {
-                const tc = tierColors[dr.tier];
-                return (
-                  <div key={dr.name} className="p-3 rounded-lg border border-border bg-card">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className={cn("px-2 py-0.5 rounded text-[9px] font-bold uppercase", tc.bg, tc.text, tc.border, "border")}>{dr.tier}</span>
-                    </div>
-                    <p className="text-sm font-semibold text-foreground">{dr.name}</p>
-                    <p className="text-[11px] text-muted-foreground leading-relaxed mt-1">{dr.evidence}</p>
+        <div className="px-8 py-6 overflow-y-auto" style={{ maxHeight: "calc(88vh - 280px)" }}>
+          <div className="grid grid-cols-3 gap-5">
+            {lanes.map((lane, laneIdx) => (
+              <div key={lane.title} className="flex flex-col">
+                {/* Lane header */}
+                <div className={cn("flex items-center gap-2.5 mb-4 pb-3 border-b-2", lane.accentBorder)}>
+                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", lane.accentBg)}>
+                    <lane.icon className={cn("w-4 h-4", lane.accentText)} />
                   </div>
-                );
-              }) : (
-                <div className="flex items-center justify-center h-20 rounded-lg border border-dashed border-border bg-muted/20">
-                  <p className="text-xs text-muted-foreground">No current pipeline</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-bold text-foreground">{lane.title}</h4>
+                      <span className={cn("w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white", lane.dotColor)}>
+                        {lane.count}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">{lane.subtitle}</p>
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* Departed */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
-                <UserMinus className="w-4 h-4 text-rose-500" />
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground">Departed</h4>
-                <p className="text-[10px] text-muted-foreground">{magnet.departed.length} left the company</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              {magnet.departed.length > 0 ? magnet.departed.map((d) => (
-                <div key={d.name} className="p-3 rounded-lg border border-border bg-card">
-                  <p className="text-sm font-semibold text-foreground">{d.name}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{d.lastRole}</p>
-                  <p className="text-[10px] font-medium text-rose-500 mt-1">{d.departure}</p>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-1.5">{d.note}</p>
-                </div>
-              )) : (
-                <div className="flex items-center justify-center h-20 rounded-lg border border-dashed border-border bg-muted/20">
-                  <p className="text-xs text-muted-foreground">No departures recorded</p>
-                </div>
-              )}
-            </div>
-          </div>
+                {/* Lane cards */}
+                <div className="space-y-3 flex-1">
+                  {laneIdx === 0 && (
+                    magnet.directReports.length > 0 ? magnet.directReports.map((dr) => {
+                      const tc = tierColors[dr.tier];
+                      return (
+                        <div key={dr.name} className="p-4 rounded-xl border border-border bg-card hover:shadow-sm transition-shadow">
+                          <span className={cn("inline-block px-2.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide mb-2.5", tc.bg, tc.text, tc.border, "border")}>{dr.tier}</span>
+                          <p className="text-[13px] font-bold text-foreground leading-tight">{dr.name}</p>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">{dr.evidence}</p>
+                        </div>
+                      );
+                    }) : (
+                      <div className="flex flex-col items-center justify-center py-10 rounded-xl border border-dashed border-border bg-muted/10">
+                        <UserCheck className="w-5 h-5 text-muted-foreground/40 mb-2" />
+                        <p className="text-xs text-muted-foreground">No current pipeline</p>
+                      </div>
+                    )
+                  )}
 
-          {/* Alumni */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
-                <RotateCcw className="w-4 h-4 text-blue-500" />
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground">Alumni Network</h4>
-                <p className="text-[10px] text-muted-foreground">{magnet.alumni.length} former reports</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              {magnet.alumni.length > 0 ? magnet.alumni.map((a) => (
-                <div key={a.name} className="p-3 rounded-lg border border-border bg-card">
-                  <p className="text-sm font-semibold text-foreground">{a.name}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{a.currentRole}</p>
-                  <p className="text-[10px] font-medium text-blue-500 mt-1">{a.periodUnder}</p>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-1.5">{a.note}</p>
+                  {laneIdx === 1 && (
+                    magnet.departed.length > 0 ? magnet.departed.map((d) => (
+                      <div key={d.name} className="p-4 rounded-xl border border-border bg-card hover:shadow-sm transition-shadow">
+                        <p className="text-[13px] font-bold text-foreground leading-tight">{d.name}</p>
+                        <p className="text-[11px] text-muted-foreground mt-1">{d.lastRole}</p>
+                        <span className="inline-block mt-2 px-2 py-0.5 rounded-md bg-rose-50 text-rose-600 text-[10px] font-semibold border border-rose-100">{d.departure}</span>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">{d.note}</p>
+                      </div>
+                    )) : (
+                      <div className="flex flex-col items-center justify-center py-10 rounded-xl border border-dashed border-border bg-muted/10">
+                        <UserMinus className="w-5 h-5 text-muted-foreground/40 mb-2" />
+                        <p className="text-xs text-muted-foreground">No departures recorded</p>
+                      </div>
+                    )
+                  )}
+
+                  {laneIdx === 2 && (
+                    magnet.alumni.length > 0 ? magnet.alumni.map((a) => (
+                      <div key={a.name} className="p-4 rounded-xl border border-border bg-card hover:shadow-sm transition-shadow">
+                        <p className="text-[13px] font-bold text-foreground leading-tight">{a.name}</p>
+                        <p className="text-[11px] text-muted-foreground mt-1">{a.currentRole}</p>
+                        <span className="inline-block mt-2 px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 text-[10px] font-semibold border border-blue-100">{a.periodUnder}</span>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">{a.note}</p>
+                      </div>
+                    )) : (
+                      <div className="flex flex-col items-center justify-center py-10 rounded-xl border border-dashed border-border bg-muted/10">
+                        <RotateCcw className="w-5 h-5 text-muted-foreground/40 mb-2" />
+                        <p className="text-xs text-muted-foreground">No alumni tracked</p>
+                      </div>
+                    )
+                  )}
                 </div>
-              )) : (
-                <div className="flex items-center justify-center h-20 rounded-lg border border-dashed border-border bg-muted/20">
-                  <p className="text-xs text-muted-foreground">No alumni tracked</p>
-                </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </DialogContent>
