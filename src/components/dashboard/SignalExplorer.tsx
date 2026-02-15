@@ -89,19 +89,27 @@ const SignalExplorer = () => {
     <div className="relative" ref={containerRef}>
 
       {/* Vertical list */}
-      <div className="space-y-12">
+      <div className="space-y-8">
         {signalCategories.map((category) => {
           const isExpanded = expandedCategories.has(category.id);
           
           return (
-            <div key={category.id}>
-              <div className={cn("flex gap-0", isExpanded ? "items-center" : "items-center")}>
-                {/* Left: category trigger — solid color with white text */}
-                <div className="w-72 flex-shrink-0">
+            <motion.div 
+              key={category.id}
+              layout
+              transition={{ layout: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } }}
+            >
+              <div className="flex gap-0 items-start">
+                {/* Left: category trigger */}
+                <motion.div 
+                  className="w-72 flex-shrink-0 pt-1"
+                  layout="position"
+                  transition={{ layout: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } }}
+                >
                   <div
                     ref={el => { if (el) categoryRefs.current.set(category.id, el); }}
                     onClick={() => toggleCategory(category.id)}
-                    className="flex flex-col items-center px-4 py-5 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md border border-border/40 relative"
+                    className="flex flex-col items-center px-4 py-5 rounded-xl cursor-pointer transition-shadow shadow-sm hover:shadow-md border border-border/40 relative"
                     style={{
                       background: `linear-gradient(135deg, ${category.color}20 0%, ${category.color}08 40%, white 75%)`,
                     }}
@@ -109,12 +117,10 @@ const SignalExplorer = () => {
                     {/* Expand arrow */}
                     <div className="absolute top-3 right-3">
                       <motion.div
-                        animate={{ rotate: isExpanded ? 0 : 0 }}
-                        transition={{ duration: 0.2 }}
+                        animate={{ rotate: isExpanded ? 90 : 0 }}
+                        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                       >
-                        <ChevronRight 
-                          className={cn("h-4 w-4 text-muted-foreground transition-transform duration-200", isExpanded && "rotate-90")} 
-                        />
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                       </motion.div>
                     </div>
 
@@ -149,106 +155,125 @@ const SignalExplorer = () => {
                       {category.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Connector line */}
-                <div className="flex items-center flex-shrink-0" style={{ width: '40px' }}>
-                  <div 
+                <div className="flex items-center flex-shrink-0 pt-1" style={{ width: '40px', marginTop: '80px' }}>
+                  <motion.div 
                     className="w-full h-[2px] rounded-full"
+                    animate={{ 
+                      backgroundColor: `${category.color}${isExpanded ? '40' : '20'}`,
+                    }}
+                    transition={{ duration: 0.3 }}
                     style={{ backgroundColor: `${category.color}${isExpanded ? '40' : '20'}` }}
                   />
                 </div>
 
                 {/* Right: sub-signals or collapsed summary */}
-                <AnimatePresence mode="wait">
-                  {isExpanded ? (
-                    <motion.div
-                      key="expanded"
-                      initial={{ opacity: 0, x: 16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 16 }}
-                      transition={{ duration: 0.25 }}
-                      className="flex-1 min-w-0 space-y-2.5 py-1"
-                    >
-                      {category.subSignals.map((subSignal, idx) => {
-                        const level = getPredictiveLevel(subSignal.predictiveStrength);
-                        return (
-                          <div
-                            key={idx}
-                            ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
-                            className="relative flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm transition-none overflow-hidden"
-                          >
-                            {/* Subtle gradient accent from right */}
-                            <div
-                              className="absolute inset-0 pointer-events-none"
-                              style={{
-                                background: `linear-gradient(270deg, ${category.color}0c 0%, transparent 60%)`,
-                              }}
-                            />
-                            {/* Strength Ring */}
-                            <div className="flex-shrink-0">
-                              <StrengthRing
-                                value={subSignal.predictiveStrength}
-                                color={category.color}
-                                size={52}
-                                strokeWidth={4}
-                              />
-                            </div>
-
-                            {/* Signal info */}
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-sm text-foreground truncate">{subSignal.name}</h4>
-                              <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
-                            </div>
-
-                            {/* Predictive level badge — right aligned */}
-                            <span
-                              className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
-                              style={{ backgroundColor: level.bgColor, color: level.color }}
-                            >
-                              {level.label}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="collapsed"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex-1 min-w-0 py-1"
-                    >
-                      <div 
-                        className="rounded-xl border border-dashed border-border/40 px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-border/60 transition-colors"
-                        onClick={() => toggleCategory(category.id)}
-                        style={{
-                          background: `linear-gradient(135deg, ${category.color}04 0%, transparent 100%)`,
+                <div className="flex-1 min-w-0 pt-1">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {isExpanded ? (
+                      <motion.div
+                        key={`expanded-${category.id}`}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ 
+                          height: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
+                          opacity: { duration: 0.2, delay: 0.05 },
                         }}
+                        className="overflow-hidden"
                       >
-                        <div 
-                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                          style={{ backgroundColor: `${category.color}10` }}
-                        >
-                          <Activity className="w-4 h-4" style={{ color: category.color }} />
+                        <div className="space-y-2.5 py-1">
+                          {category.subSignals.map((subSignal, idx) => {
+                            const level = getPredictiveLevel(subSignal.predictiveStrength);
+                            return (
+                              <motion.div
+                                key={idx}
+                                ref={el => { if (el) behaviorRefs.current.set(`${category.id}-${idx}`, el); }}
+                                initial={{ opacity: 0, x: 12 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.25, delay: idx * 0.04 }}
+                                className="relative flex items-center gap-4 px-5 py-4 rounded-xl bg-white border border-border/50 shadow-sm overflow-hidden"
+                              >
+                                {/* Subtle gradient accent from right */}
+                                <div
+                                  className="absolute inset-0 pointer-events-none"
+                                  style={{
+                                    background: `linear-gradient(270deg, ${category.color}0c 0%, transparent 60%)`,
+                                  }}
+                                />
+                                {/* Strength Ring */}
+                                <div className="flex-shrink-0">
+                                  <StrengthRing
+                                    value={subSignal.predictiveStrength}
+                                    color={category.color}
+                                    size={52}
+                                    strokeWidth={4}
+                                  />
+                                </div>
+
+                                {/* Signal info */}
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-sm text-foreground truncate">{subSignal.name}</h4>
+                                  <p className="text-xs text-muted-foreground truncate">{subSignal.description}</p>
+                                </div>
+
+                                {/* Predictive level badge */}
+                                <span
+                                  className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
+                                  style={{ backgroundColor: level.bgColor, color: level.color }}
+                                >
+                                  {level.label}
+                                </span>
+                              </motion.div>
+                            );
+                          })}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-muted-foreground">
-                            <span className="font-medium text-foreground">{category.subSignals.length} signals</span>
-                            {' · '}
-                            {category.subSignals.slice(0, 3).map(s => s.name).join(', ')}
-                            {category.subSignals.length > 3 && ` +${category.subSignals.length - 3} more`}
-                          </p>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key={`collapsed-${category.id}`}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ 
+                          height: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+                          opacity: { duration: 0.2, delay: 0.05 },
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="py-1">
+                          <div 
+                            className="rounded-xl border border-dashed border-border/40 px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-border/60 transition-colors"
+                            onClick={() => toggleCategory(category.id)}
+                            style={{
+                              background: `linear-gradient(135deg, ${category.color}04 0%, transparent 100%)`,
+                            }}
+                          >
+                            <div 
+                              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                              style={{ backgroundColor: `${category.color}10` }}
+                            >
+                              <Activity className="w-4 h-4" style={{ color: category.color }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-muted-foreground">
+                                <span className="font-medium text-foreground">{category.subSignals.length} signals</span>
+                                {' · '}
+                                {category.subSignals.slice(0, 3).map(s => s.name).join(', ')}
+                                {category.subSignals.length > 3 && ` +${category.subSignals.length - 3} more`}
+                              </p>
+                            </div>
+                            <span className="text-xs text-muted-foreground/60">Click to expand</span>
+                          </div>
                         </div>
-                        <span className="text-xs text-muted-foreground/60">Click to expand</span>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
