@@ -318,21 +318,6 @@ const TalentMagnetPage = () => {
               </div>
             </section>
 
-            {/* Gaps */}
-            <section>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-amber-500" />
-                </div>
-                <h2 className="text-2xl font-bold text-foreground">Where the Gaps Are</h2>
-              </div>
-              <p className="text-[11px] uppercase tracking-widest text-muted-foreground mb-6 ml-12">
-                Teams where structural or design issues may be limiting leader development
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                {gaps.map((m, i) => <MagnetCard key={m.name} magnet={m} index={i} />)}
-              </div>
-            </section>
           </div>
         </div>
       </div>

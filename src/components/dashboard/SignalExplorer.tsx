@@ -87,25 +87,6 @@ const SignalExplorer = () => {
 
   return (
     <div className="relative" ref={containerRef}>
-      {/* SVG for connection lines */}
-      <svg 
-        className="absolute inset-0 w-full h-full pointer-events-none z-10" 
-        style={{ overflow: 'visible' }}
-      >
-        {lines.map((line, idx) => (
-          <motion.path
-            key={line.key}
-            d={line.path}
-            fill="none"
-            stroke={line.color}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.35, delay: idx * 0.025 }}
-          />
-        ))}
-      </svg>
 
       {/* Vertical list */}
       <div className="space-y-12">
@@ -114,7 +95,7 @@ const SignalExplorer = () => {
           
           return (
             <div key={category.id}>
-              <div className={cn("flex gap-10", isExpanded ? "items-center" : "items-start")}>
+              <div className={cn("flex gap-0", isExpanded ? "items-center" : "items-center")}>
                 {/* Left: category trigger — solid color with white text */}
                 <div className="w-72 flex-shrink-0">
                   <div
@@ -168,6 +149,14 @@ const SignalExplorer = () => {
                       {category.description}
                     </p>
                   </div>
+                </div>
+
+                {/* Connector line */}
+                <div className="flex items-center flex-shrink-0" style={{ width: '40px' }}>
+                  <div 
+                    className="w-full h-[2px] rounded-full"
+                    style={{ backgroundColor: `${category.color}${isExpanded ? '40' : '20'}` }}
+                  />
                 </div>
 
                 {/* Right: sub-signals or collapsed summary */}
