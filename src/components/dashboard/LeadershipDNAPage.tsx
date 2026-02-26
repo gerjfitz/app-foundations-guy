@@ -73,9 +73,9 @@ const LeadershipDNAPage = () => {
                 <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 flex-shrink-0">Signal Strength Key</span>
                 <div className="w-px h-8 bg-border/40" />
                 <div className="flex items-center gap-3">
-                  <StrengthRing value={95} color="#f59e0b" size={40} strokeWidth={3.5} />
+                  <StrengthRing value={85} color="#f59e0b" size={40} strokeWidth={3.5} />
                   <p className="text-sm text-muted-foreground leading-snug">
-                    = this signal appears in <span className="font-semibold text-foreground">95%</span> of your Accelerate group
+                    = this signal appears in <span className="font-semibold text-foreground">85%</span> of your Accelerate group
                   </p>
                 </div>
               </motion.div>
@@ -135,11 +135,11 @@ const LeadershipDNAPage = () => {
           <div className="relative px-8 pt-8 pb-6 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-50/80 via-orange-50/40 to-purple-50/30 pointer-events-none" />
             <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(245,158,11,0.12), transparent 70%)" }} />
-            <div className="relative z-10">
+            <div className="relative z-10 flex flex-col items-center text-center">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 border border-amber-200/40 flex items-center justify-center mb-4">
                 <Dna className="w-6 h-6 text-amber-600" />
               </div>
-              <DialogHeader>
+              <DialogHeader className="items-center">
                 <DialogTitle className="text-2xl font-bold text-foreground">What is the Leadership Genome?</DialogTitle>
               </DialogHeader>
               <p className="text-sm text-muted-foreground leading-relaxed mt-3 max-w-lg">
@@ -178,6 +178,24 @@ const LeadershipDNAPage = () => {
                   </div>
                 );
               })}
+            </div>
+
+            {/* Example */}
+            <div className="mt-6 rounded-xl border border-border/40 bg-gradient-to-br from-orange-50/40 to-amber-50/20 p-5">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-4">Example</p>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 mt-0.5">
+                  <StrengthRing value={85} color="#f59e0b" size={48} strokeWidth={4} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-1">
+                    "Executive Access" signal — 85%
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    This means that <span className="font-medium text-foreground">85% of your Accelerate group</span> — the employees most likely to become future VPs — regularly interact with C-suite executives. If someone in your pipeline also shows this pattern, it's a strong indicator they share the same behavioral DNA as your future leaders.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </DialogContent>
