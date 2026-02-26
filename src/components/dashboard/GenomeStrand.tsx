@@ -76,7 +76,7 @@ const GenomeStrand = () => {
     >
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="w-[420px] h-[44px]"
+        className="w-[336px] h-[44px]"
         fill="none"
       >
         {/* Cross-links (behind strands) */}
