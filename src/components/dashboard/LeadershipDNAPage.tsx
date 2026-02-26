@@ -24,14 +24,10 @@ const LeadershipDNAPage = () => {
               <h1 className="text-4xl font-bold text-foreground mt-3 mb-4">
                 Organisation Leadership
                 <br />
-                <span className="bg-gradient-to-r from-amber-600 via-orange-500 to-purple-600 bg-clip-text text-transparent">Genome</span>
+                Genome
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                The behavioral patterns that distinguish your future leaders. Based on analysis of your{" "}
-                <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/60">
-                  Accelerate Group
-                </span>
-                {" "}— the 30 employees most likely to reach VP+.
+                The behavioral patterns that distinguish your future leaders. Based on analysis of your Accelerate Group — the 30 employees most likely to reach VP+.
               </p>
 
               {/* What is the Leadership Genome — redesigned */}
@@ -64,23 +60,26 @@ const LeadershipDNAPage = () => {
         {/* Content */}
         <div className="flex justify-center">
           <div className="w-full max-w-[1020px] py-8 px-8">
-            {/* Signal Strength Key — redesigned bigger */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.1 }}
-              className="rounded-xl border border-border/30 bg-muted/15 px-6 py-4 mb-8 flex items-center gap-5"
-            >
-              <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 flex-shrink-0">Signal Strength Key</span>
-              <div className="w-px h-8 bg-border/40" />
-              <div className="flex items-center gap-3">
-                <StrengthRing value={95} color="#f59e0b" size={40} strokeWidth={3.5} />
-                <p className="text-sm text-muted-foreground leading-snug">
-                  = this signal appears in <span className="font-semibold text-foreground">95%</span> of your{" "}
-                  <span className="font-medium text-amber-700">Accelerate</span> group
-                </p>
-              </div>
-            </motion.div>
+            {/* Signal Strength Key — right-aligned with sub-signal panels */}
+            <div className="flex items-center gap-0">
+              <div className="w-72 flex-shrink-0" />
+              <div className="flex-shrink-0" style={{ width: '48px' }} />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.1 }}
+                className="flex-1 min-w-0 rounded-xl border border-border/30 bg-muted/15 px-5 py-3.5 mb-8 flex items-center gap-4"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 flex-shrink-0">Signal Strength Key</span>
+                <div className="w-px h-8 bg-border/40" />
+                <div className="flex items-center gap-3">
+                  <StrengthRing value={95} color="#f59e0b" size={40} strokeWidth={3.5} />
+                  <p className="text-sm text-muted-foreground leading-snug">
+                    = this signal appears in <span className="font-semibold text-foreground">95%</span> of your Accelerate group
+                  </p>
+                </div>
+              </motion.div>
+            </div>
 
             <SignalExplorer showCleadMapping={showCleadMapping} />
 
