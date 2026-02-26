@@ -143,7 +143,7 @@ const LeadershipDNAPage = () => {
                 <DialogTitle className="text-2xl font-bold text-foreground">What is the Leadership Genome?</DialogTitle>
               </DialogHeader>
               <p className="text-sm text-muted-foreground leading-relaxed mt-3 max-w-lg">
-                Just as a biological genome is the unique DNA blueprint that defines a living organism, your{" "}
+                Just as a biological genome is the unique blueprint that defines a living organism, your{" "}
                 <span className="font-semibold text-foreground">Leadership Genome</span> is the unique behavioral blueprint of leaders who advance to VP+ in your company. No two organizations share the same genome — yours is built from patterns specific to <em>your</em> leadership culture.
               </p>
             </div>
