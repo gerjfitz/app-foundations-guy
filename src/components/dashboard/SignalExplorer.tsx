@@ -326,10 +326,7 @@ const SignalExplorer = ({ showCleadMapping = false }: SignalExplorerProps) => {
                                     )}
                                   </AnimatePresence>
                                 </div>
-                                <span
-                                  className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex-shrink-0"
-                                  style={{ backgroundColor: level.bgColor, color: level.color }}
-                                >
+                                <span className="text-[11px] font-medium text-muted-foreground flex-shrink-0">
                                   {level.label}
                                 </span>
                               </motion.div>
