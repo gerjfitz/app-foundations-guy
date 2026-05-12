@@ -167,11 +167,11 @@ const LeaderGenomeExplorer = ({ firstName }: { firstName: string }) => {
                   >
                     <div className="mb-2">
                       <CountRing
-                        demonstrated={demonstratedCount}
+                      demonstrated={demonstratedCount}
                         total={total}
                         color={hasAny ? category.color : "#94a3b8"}
-                        size={56}
-                        strokeWidth={4}
+                        size={96}
+                        strokeWidth={5}
                       />
                     </div>
                     <span
