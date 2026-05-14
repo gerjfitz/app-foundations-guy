@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useEmblaCarousel from "embla-carousel-react";
 import AIAssistantDrawer from "./AIAssistantDrawer";
+import PipelineMovementCarousel, { type PipelinePerson } from "./PipelineMovementCarousel";
 
 interface TierDetailPageProps {
   tier: "monitor" | "nurture" | "accelerate";
