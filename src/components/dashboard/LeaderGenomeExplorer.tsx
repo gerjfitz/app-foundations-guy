@@ -152,7 +152,7 @@ const LeaderGenomeExplorer = ({ firstName }: { firstName: string }) => {
         newLines.push({
           key: `${category.id}-${idx}`,
           path: `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`,
-          color: isDemo ? `${category.color}80` : `${category.color}25`,
+          color: isDemo ? `${category.color}80` : `${category.color}55`,
           faded: !isDemo,
         });
       });
