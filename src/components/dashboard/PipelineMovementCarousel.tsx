@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import useEmblaCarousel from "embla-carousel-react";
 import {
@@ -118,55 +119,8 @@ const PipelineMovementCarousel = ({ people }: Props) => {
                 </div>
 
                 {/* Body */}
-                <div className="px-6 pt-6 pb-6 flex-1 flex flex-col gap-5 border-t border-border/40 mt-6">
-                  {/* New Signals */}
-                  <div>
-                    <h5 className="text-sm font-bold text-foreground mb-3">New Signals, last 30 days</h5>
-                    <div className="flex flex-wrap gap-2">
-                      {person.newSignals.map((sig) => {
-                        const Icon = signalIconMap[sig.icon];
-                        const color = signalIconColors[sig.icon];
-                        return (
-                          <div
-                            key={sig.label}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${color.bg} border border-border/40`}
-                          >
-                            <Icon className={`w-4 h-4 ${color.text}`} />
-                            <span className="text-xs font-medium text-foreground">{sig.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Recent Activity */}
-                  <div className="pt-4 border-t border-border/40">
-                    <h5 className="text-sm font-bold text-foreground mb-3">Recent activity</h5>
-                    <div className="grid grid-cols-4 gap-2">
-                      {person.recentActivity.map((act) => {
-                        const Icon = activityIconMap[act.icon];
-                        const color = activityIconColors[act.icon];
-                        return (
-                          <div key={act.label} className="flex flex-col items-center text-center">
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <div className={`w-7 h-7 rounded-full ${color.bg} flex items-center justify-center`}>
-                                <Icon className={`w-3.5 h-3.5 ${color.text}`} />
-                              </div>
-                              <span className="text-lg font-bold text-foreground">{act.value}</span>
-                            </div>
-                            <span className="text-[10px] text-muted-foreground leading-tight">{act.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Summary */}
-                  <div className="pt-4 border-t border-border/40">
-                    <h5 className="text-sm font-bold text-foreground mb-2">30 Day Summary</h5>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{person.summary}</p>
-                  </div>
-                </div>
+                <CardBody person={person} />
+              </div>
               </div>
             </motion.div>
           ))}
