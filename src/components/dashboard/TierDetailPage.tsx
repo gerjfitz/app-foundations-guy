@@ -326,48 +326,115 @@ const FeaturedLeadersCarousel = ({
 };
 
 // Pipeline Movement visualization data for Accelerate tier
-const pipelineMovementData = [
-  { 
-    name: "Victoria Reynolds", 
-    role: "Senior Director, R&D", 
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=face",
-    movement: 85,
+const pipelineMovementData: PipelinePerson[] = [
+  {
+    name: "Victoria Reynolds",
+    role: "Senior Director, R&D",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Cross-Functional Leadership", icon: "users" },
+      { label: "Strategic Influence", icon: "lightbulb" },
+      { label: "Developing Others", icon: "userplus" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 6, icon: "award" },
+      { label: "Recognizers", value: 5, icon: "lightbulb" },
+      { label: "Functions", value: 3, icon: "network" },
+      { label: "Sr. leaders", value: 2, icon: "crown" },
+    ],
+    summary:
+      "Victoria was recognized by the Sr. Vice President - Talent and Inclusion for stepping up to lead an HR workstream on the Future of Work project while maintaining her full-time responsibilities. This adds to her already strong profile of transformational leadership and capability-building, now demonstrating initiative to take on enterprise-level strategic work beyond her core role.",
   },
-  { 
-    name: "Richard Lee", 
-    role: "VP, R&D Operations", 
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-    movement: 70,
+  {
+    name: "Richard Lee",
+    role: "VP, R&D Operations",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Executive Access", icon: "users" },
+      { label: "Enterprise Vision", icon: "lightbulb" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 5, icon: "award" },
+      { label: "Recognizers", value: 4, icon: "lightbulb" },
+      { label: "Functions", value: 4, icon: "network" },
+      { label: "Sr. leaders", value: 3, icon: "crown" },
+    ],
+    summary:
+      "Richard led a cross-regional operations review presented directly to the COO, surfacing a $12M efficiency opportunity. Multiple SVPs cited his ability to translate technical complexity into board-ready narrative — a hallmark Accelerate signal.",
   },
-  { 
-    name: "Daniel Kim", 
-    role: "Senior Director, Manufacturing", 
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-    movement: 60,
+  {
+    name: "Daniel Kim",
+    role: "Senior Director, Manufacturing",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Operational Excellence", icon: "lightbulb" },
+      { label: "Talent Development", icon: "userplus" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 4, icon: "award" },
+      { label: "Recognizers", value: 4, icon: "lightbulb" },
+      { label: "Functions", value: 2, icon: "network" },
+      { label: "Sr. leaders", value: 2, icon: "crown" },
+    ],
+    summary:
+      "Daniel was named delivery lead for the new Singapore facility ramp, with the SVP Supply Chain highlighting his coaching of two emerging plant managers. Strong combination of execution and people-development signals this quarter.",
   },
-  { 
-    name: "Michael Chang", 
-    role: "VP, Commercial Strategy", 
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-    movement: 55,
+  {
+    name: "Michael Chang",
+    role: "VP, Commercial Strategy",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Market Creation", icon: "lightbulb" },
+      { label: "Cross-Functional Leadership", icon: "users" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 5, icon: "award" },
+      { label: "Recognizers", value: 3, icon: "lightbulb" },
+      { label: "Functions", value: 3, icon: "network" },
+      { label: "Sr. leaders", value: 2, icon: "crown" },
+    ],
+    summary:
+      "Michael shaped the GTM thesis for the new APAC commercial segment, cited by the Chief Commercial Officer in the latest investor update. His ability to align Product, Marketing and Sales around a single strategic narrative continues to stand out.",
   },
-  { 
-    name: "Andrew Walsh", 
-    role: "Executive Director, R&D", 
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=face",
-    movement: 45,
+  {
+    name: "Andrew Walsh",
+    role: "Executive Director, R&D",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Strategic Influence", icon: "lightbulb" },
+      { label: "Developing Others", icon: "userplus" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 4, icon: "award" },
+      { label: "Recognizers", value: 3, icon: "lightbulb" },
+      { label: "Functions", value: 2, icon: "network" },
+      { label: "Sr. leaders", value: 2, icon: "crown" },
+    ],
+    summary:
+      "Andrew co-authored the platform R&D roadmap and ran two technical mentoring circles for early-career scientists. SVP R&D specifically called out his shift from individual technical authority to multiplier-style leadership.",
   },
-  { 
-    name: "Elizabeth Hart", 
-    role: "Executive Director, Medical", 
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=face",
-    movement: 40,
+  {
+    name: "Elizabeth Hart",
+    role: "Executive Director, Medical",
+    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&h=200&fit=crop&crop=face",
     joinedAccelerate: "High signals",
+    newSignals: [
+      { label: "Cross-Functional Leadership", icon: "users" },
+      { label: "Enterprise Vision", icon: "lightbulb" },
+    ],
+    recentActivity: [
+      { label: "Recognitions", value: 4, icon: "award" },
+      { label: "Recognizers", value: 3, icon: "lightbulb" },
+      { label: "Functions", value: 3, icon: "network" },
+      { label: "Sr. leaders", value: 2, icon: "crown" },
+    ],
+    summary:
+      "Elizabeth represented Medical Affairs in the cross-functional pricing committee and was recognized by the CMO for her clarity in regulatory-strategy trade-offs. Increasing visibility with both commercial and executive leadership.",
   },
 ];
 
