@@ -121,7 +121,6 @@ const PipelineMovementCarousel = ({ people }: Props) => {
                 {/* Body */}
                 <CardBody person={person} />
               </div>
-              </div>
             </motion.div>
           ))}
         </div>
