@@ -77,12 +77,12 @@ const NumberBadge = ({
   hasAny,
 }: { demonstrated: number; total: number; color: string; hasAny: boolean }) => (
   <div
-    className="flex flex-col items-center justify-center rounded-2xl px-5 py-3"
+    className="flex flex-col items-center justify-center rounded-full"
     style={{
       width: 96,
       height: 96,
-      backgroundColor: hasAny ? `${color}18` : "rgba(100,116,139,0.08)",
-      border: `1px solid ${hasAny ? `${color}33` : "rgba(100,116,139,0.15)"}`,
+      backgroundColor: hasAny ? `${color}18` : "transparent",
+      border: `1px solid ${hasAny ? `${color}33` : "hsl(var(--border))"}`,
     }}
   >
     <Signal
@@ -92,11 +92,11 @@ const NumberBadge = ({
     />
     <span
       className="font-bold tabular-nums leading-none"
-      style={{ color: hasAny ? color : "#94a3b8", fontSize: 28 }}
+      style={{ color: hasAny ? color : "#64748b", fontSize: 36 }}
     >
       {demonstrated}
     </span>
-    <span className="text-[10px] font-medium mt-0.5" style={{ color: hasAny ? `${color}` : "#94a3b8", opacity: 0.7 }}>
+    <span className="text-[10px] font-medium mt-0.5" style={{ color: hasAny ? color : "#94a3b8", opacity: 0.7 }}>
       of {total}
     </span>
   </div>
@@ -105,14 +105,14 @@ const NumberBadge = ({
 // Option 3: Just a large styled signal icon
 const IconBadge = ({ color, hasAny }: { color: string; hasAny: boolean }) => (
   <div
-    className="flex items-center justify-center rounded-2xl"
+    className="flex items-center justify-center rounded-full"
     style={{
       width: 96,
       height: 96,
       background: hasAny
         ? `linear-gradient(135deg, ${color}30 0%, ${color}10 100%)`
-        : "rgba(100,116,139,0.08)",
-      border: `1px solid ${hasAny ? `${color}40` : "rgba(100,116,139,0.15)"}`,
+        : "transparent",
+      border: `1px solid ${hasAny ? `${color}40` : "hsl(var(--border))"}`,
       boxShadow: hasAny ? `0 4px 16px -4px ${color}40` : "none",
     }}
   >
