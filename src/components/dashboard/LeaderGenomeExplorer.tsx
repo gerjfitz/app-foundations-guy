@@ -276,8 +276,8 @@ const LeaderGenomeExplorer = ({ firstName }: { firstName: string }) => {
                       ref={el => { if (el) subSignalRefs.current.set(`${category.id}-${idx}`, el); }}
                       className="relative flex items-center gap-3 px-4 py-3 rounded-xl bg-white border shadow-sm overflow-hidden"
                       style={{
-                        borderColor: isDemo ? `${category.color}55` : "hsl(var(--border) / 0.4)",
-                        opacity: isDemo ? 1 : 0.5,
+                        borderColor: isDemo ? `${category.color}55` : "hsl(var(--border) / 0.6)",
+                        opacity: isDemo ? 1 : 0.85,
                       }}
                     >
                       {isDemo && (
