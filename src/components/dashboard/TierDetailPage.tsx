@@ -698,57 +698,7 @@ const TierDetailPage = ({ tier, onBack, onPersonClick }: TierDetailPageProps) =>
                       </div>
                     </div>
                     
-                    <div className="flex items-start justify-between gap-6">
-                      {pipelineMovementData.map((person, index) => (
-                        <motion.div
-                          key={person.name}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: index * 0.1 }}
-                          className="flex flex-col items-center flex-1 group cursor-pointer"
-                        >
-                          {/* Avatar at top */}
-                          <div className="relative z-10">
-                            <img
-                              src={person.image}
-                              alt={person.name}
-                              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg transition-transform group-hover:scale-110"
-                            />
-                            <div className="absolute -top-1 -right-1 w-6 h-6 bg-success rounded-full flex items-center justify-center border-2 border-white shadow-md">
-                              <TrendingUp className="w-3 h-3 text-white" />
-                            </div>
-                          </div>
-
-                          {/* Movement Bar - animates down from avatar */}
-                          <div className="relative w-12 -mt-2 overflow-hidden" style={{ height: '140px' }}>
-                            <motion.div
-                              initial={{ height: 0 }}
-                              animate={{ height: '140px' }}
-                              transition={{ duration: 0.8, delay: 0.3 + index * 0.15, ease: "easeOut" }}
-                              className="absolute top-0 left-0 right-0 rounded-b-xl"
-                              style={{
-                                background: 'linear-gradient(to bottom, rgba(34, 197, 94, 0.9) 0%, rgba(34, 197, 94, 0.7) 30%, rgba(34, 197, 94, 0.2) 70%, rgba(34, 197, 94, 0.02) 90%, rgba(255, 255, 255, 0) 100%)',
-                              }}
-                            />
-                          </div>
-
-                          {/* Name and Role */}
-                          <h4 className="font-semibold text-foreground text-sm text-center group-hover:text-success transition-colors mt-4">
-                            {person.name}
-                          </h4>
-                          <p className="text-xs text-muted-foreground text-center truncate max-w-[120px]">
-                            {person.role}
-                          </p>
-                          
-                          {/* Time Panel */}
-                          <div className="mt-2 px-3 py-1.5 bg-success/10 rounded-full">
-                            <span className="text-xs font-medium text-success">
-                              {person.joinedAccelerate}
-                            </span>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
+                    <PipelineMovementCarousel people={pipelineMovementData} />
 
                     {/* AI Insight */}
                     <div className="mt-10 pt-6 border-t border-border">
