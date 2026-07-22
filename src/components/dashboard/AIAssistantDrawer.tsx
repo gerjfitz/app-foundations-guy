@@ -145,27 +145,10 @@ interface AIAssistantBadgeProps {
   suggestedPrompts: string[];
 }
 
-export const AIAssistantBadge = ({ context, suggestedPrompts }: AIAssistantBadgeProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-accent-magenta/10 border border-primary/20 hover:border-primary/40 hover:from-primary/15 hover:to-accent-magenta/15 transition-all group"
-      >
-        <Sparkles className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
-        <span className="text-sm font-medium text-foreground">Ask AI</span>
-      </button>
-
-      <AIAssistantDrawer
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        context={context}
-        suggestedPrompts={suggestedPrompts}
-      />
-    </>
-  );
+export const AIAssistantBadge = (_props: AIAssistantBadgeProps) => {
+  // Hidden for now
+  return null;
 };
+
 
 export default AIAssistantDrawer;
