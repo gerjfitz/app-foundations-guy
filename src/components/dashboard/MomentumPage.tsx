@@ -417,7 +417,7 @@ const GrowthPage = () => {
       </div>
 
       {/* Right: AI Assistant */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="Growth"
           categoryColor={growthColor}

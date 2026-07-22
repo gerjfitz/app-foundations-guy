@@ -298,7 +298,7 @@ const LeakagePage = () => {
       </div>
 
       {/* Right: AI Assistant — full height, matching signal page */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="Leadership Leakage"
           categoryColor={leakageColor}

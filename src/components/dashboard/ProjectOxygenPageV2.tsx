@@ -388,7 +388,7 @@ const ProjectOxygenPageV2 = () => {
       </div>
 
       {/* AI Sidebar */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="C-LEAD × Genome"
           categoryColor="#6366f1"

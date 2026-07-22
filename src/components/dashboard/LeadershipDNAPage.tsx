@@ -114,7 +114,7 @@ const LeadershipDNAPage = () => {
       </div>
 
       {/* Right: AI sidebar */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="Leadership Genome"
           categoryColor="#6366f1"

@@ -314,7 +314,7 @@ const ProjectOxygenPage = () => {
       </div>
 
       {/* Right: AI Assistant Sidebar */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="C-LEAD"
           categoryColor="#3b82f6"
