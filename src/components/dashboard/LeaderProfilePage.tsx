@@ -635,7 +635,7 @@ const LeaderProfilePage = ({ leader, onBack }: LeaderProfilePageProps) => {
       </div>
 
       {/* Right: AI sidebar */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName={leader.name}
           categoryColor="#a855f7"

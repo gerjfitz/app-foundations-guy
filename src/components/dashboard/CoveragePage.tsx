@@ -255,7 +255,7 @@ const CoveragePage = () => {
       </div>
 
       {/* Right: AI Assistant */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName="Coverage Analysis"
           categoryColor={coverageColor}

@@ -722,7 +722,7 @@ const SignalCategoryPage = ({ categoryId, onBack }: SignalCategoryPageProps) => 
       </div>
 
       {/* Right: AI Assistant — full height, no scroll needed for input */}
-      <div className="w-[410px] flex-shrink-0">
+      <div className="w-[410px] flex-shrink-0 hidden">
         <SignalAISidebar
           categoryName={category.name}
           categoryColor={categoryColor}
